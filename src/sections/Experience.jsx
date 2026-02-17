@@ -10,11 +10,11 @@ const experiences = [
         period: 'Jan 2024 – Jan 2025',
         color: '#ffc300',
         highlights: [
-            { icon: <FiGlobe size={16} />, text: 'Market research & competitor intelligence across LATAM territories' },
-            { icon: <FiTarget size={16} />, text: 'Opened Cuba & Guatemala markets — first mover advantage secured' },
-            { icon: <FiTrendingUp size={16} />, text: 'Strategic sales expansion contributing to ₹85Cr+ revenue pipeline' },
-            { icon: <FiBarChart2 size={16} />, text: 'Cross-functional campaign execution with marketing & supply chain teams' },
-            { icon: <FiGlobe size={16} />, text: 'Closed ₹4Cr bulk pharmaceutical order in just 4.5 days' },
+            { icon: <FiGlobe size={16} />, text: 'Conducted deep-dive market research & competitor intelligence across 5+ LATAM territories' },
+            { icon: <FiTarget size={16} />, text: 'Spearheaded entry into Cuba & Guatemala markets, securing critical first-mover advantage' },
+            { icon: <FiTrendingUp size={16} />, text: 'Orchestrated strategic sales expansion contributing to an ₹85Cr+ revenue pipeline' },
+            { icon: <FiBarChart2 size={16} />, text: 'Quarterbacked cross-functional campaign execution with marketing & supply chain teams' },
+            { icon: <FiGlobe size={16} />, text: 'Executed a high-stakes ₹4Cr bulk pharmaceutical order in a record-breaking 4.5 days' },
         ],
     },
     {
@@ -23,11 +23,11 @@ const experiences = [
         period: '2022 – Dec 2023',
         color: '#ffd60a',
         highlights: [
-            { icon: <FiBarChart2 size={16} />, text: '20% engagement boost through multi-channel campaign launches' },
-            { icon: <FiUsers size={16} />, text: 'Built strategic doctor partnerships across Hyderabad territory' },
-            { icon: <FiUsers size={16} />, text: 'Led and mentored a team of 12 field associates' },
-            { icon: <FiTarget size={16} />, text: 'Optimized lead generation and conversion pipeline' },
-            { icon: <FiTrendingUp size={16} />, text: 'Area revenue growth through data-backed territory management' },
+            { icon: <FiBarChart2 size={16} />, text: 'Catalyzed a 20% engagement surge through targeted multi-channel campaign launches' },
+            { icon: <FiUsers size={16} />, text: 'Forged high-value strategic doctor partnerships dominating the Hyderabad territory' },
+            { icon: <FiUsers size={16} />, text: 'Mobilized and mentored a high-performance squad of 12 field associates' },
+            { icon: <FiTarget size={16} />, text: 'Revolutionized the lead generation engine to optimize conversion pipelines' },
+            { icon: <FiTrendingUp size={16} />, text: 'Drove substantial area revenue growth through precision data-backed territory management' },
         ],
     },
 ];

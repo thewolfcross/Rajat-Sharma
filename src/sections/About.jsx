@@ -7,14 +7,14 @@ const timelineData = [
         period: 'Jan 2024 – Jan 2025',
         role: 'Business Development Associate – LATAM',
         company: 'Sekhmet Pharmaceutical',
-        description: 'Spearheading market expansion into Latin American territories, driving ₹85Cr+ revenue pipeline through strategic partnerships and competitor intelligence.',
+        description: 'Architecting the LATAM expansion strategy, decoding competitor movements to fuel an ₹85Cr+ revenue engine through high-impact partnerships.',
         icon: <FiTrendingUp />,
     },
     {
         period: '2022 – Dec 2023',
         role: 'Area Manager / Campaign Associate',
         company: 'Kishore Diagnostics',
-        description: 'Led a 12-member team, executed multi-channel campaigns achieving 20% engagement boost, and built strategic doctor partnerships across Hyderabad.',
+        description: 'Commanded a 12-strong battalion to a 20% engagement victory, cementing dominance in the Hyderabad healthcare ecosystem through relentless execution.',
         icon: <FiBriefcase />,
     },
     {
