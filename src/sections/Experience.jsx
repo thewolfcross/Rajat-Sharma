@@ -7,7 +7,7 @@ const experiences = [
     {
         company: 'Sekhmet Pharmaceutical',
         role: 'Business Development Associate – LATAM',
-        period: '2022 – Present',
+        period: 'Jan 2024 – Jan 2025',
         color: '#ffc300',
         highlights: [
             { icon: <FiGlobe size={16} />, text: 'Market research & competitor intelligence across LATAM territories' },
@@ -20,7 +20,7 @@ const experiences = [
     {
         company: 'Kishore Diagnostics',
         role: 'Area Manager / Campaign Associate',
-        period: '2020 – 2022',
+        period: '2022 – Dec 2023',
         color: '#ffd60a',
         highlights: [
             { icon: <FiBarChart2 size={16} />, text: '20% engagement boost through multi-channel campaign launches' },
