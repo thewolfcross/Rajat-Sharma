@@ -350,21 +350,37 @@ body.light-mode .timeline-dot {
   }
 }
 
-/* ===== Thanos Snap Mode ===== */
-.section-essential,
-.section-non-essential {
-  transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+/* ===== Focus Modes (Thanos & Jetha) ===== */
+.mode-transition {
+  transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.thanos-active .section-non-essential {
-  opacity: 0.1;
-  filter: blur(4px) grayscale(100%);
+/* Thanos Mode */
+.thanos-active .thanos-hidden {
+  opacity: 0.05;
+  filter: blur(8px) grayscale(100%);
   pointer-events: none;
-  transform: scale(0.98);
+  transform: scale(0.95);
 }
 
-.thanos-active .section-essential {
+.thanos-active .thanos-visible {
   transform: scale(1.02);
   z-index: 10;
-  filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.15));
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.2));
+}
+
+/* Jetha Mode */
+.jetha-active .jetha-hidden {
+  opacity: 0.1;
+  filter: blur(4px) sepia(50%);
+  pointer-events: none;
+  transform: translateY(20px);
+}
+
+.jetha-active .jetha-visible {
+  transform: scale(1.05);
+  z-index: 10;
+  filter: drop-shadow(0 0 25px rgba(255, 159, 67, 0.3));
+  border: 1px solid rgba(255, 159, 67, 0.3);
+  border-radius: 20px;
 }
