@@ -2,21 +2,29 @@
 
 /* ===== Custom Theme ===== */
 @theme {
-  --color-primary: #ffc300;
-  --color-primary-dark: #e6b000;
-  --color-accent: #ffd60a;
-  --color-dark-bg: #000814;
-  --color-dark-surface: #001d3d;
-  --color-dark-card: #003566;
-  --color-dark-border: #004080;
-  --color-dark-text: #f0e6d2;
-  --color-dark-muted: #8a9ab5;
-  --color-light-bg: #fefcf6;
+  --color-primary: #00d4ff;
+  /* Cyan */
+  --color-secondary: #ff9f43;
+  /* Orange */
+  --color-accent: #ffd700;
+  /* Gold */
+  --color-dark-bg: #050505;
+  /* Deep Black */
+  --color-dark-surface: #0a0a0f;
+  /* Near Black */
+  --color-dark-text: #f0f4f8;
+  /* Cool White */
+  --color-dark-muted: #94a3b8;
+  /* Cool Grey */
+  --color-dark-border: rgba(0, 212, 255, 0.1);
+  /* Cyan hint */
+
+  --color-light-bg: #f8f9fc;
   --color-light-surface: #ffffff;
-  --color-light-card: #fdf6e3;
-  --color-light-border: #e8dcc8;
-  --color-light-text: #000814;
+  --color-light-text: #1e293b;
   --color-light-muted: #64748b;
+  --color-light-border: #e2e8f0;
+
   --font-heading: 'Space Grotesk', sans-serif;
   --font-body: 'Inter', sans-serif;
 }
@@ -63,31 +71,33 @@ body.light-mode {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4c5a0;
-  /* Warm Beige */
-  border-radius: 3px;
+  background: var(--color-primary);
+  /* Cyan Scrollbar */
+  border-radius: 4px;
 }
 
 body.light-mode ::-webkit-scrollbar-track {
   background: var(--color-light-bg);
 }
 
-/* ===== Glass Card (Beige Theme) ===== */
+/* ===== Glass Card (Cyber Neutral Theme) ===== */
 .glass-card {
-  background: rgba(245, 245, 220, 0.08);
-  /* Glassy Beige */
+  background: rgba(255, 255, 255, 0.03);
+  /* Neutral Dark Glass */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(245, 245, 220, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Subtle White Border */
   border-radius: 16px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 }
 
 .glass-card:hover {
-  background: rgba(245, 245, 220, 0.12);
-  border-color: rgba(245, 245, 220, 0.4);
-  box-shadow: 0 8px 32px rgba(245, 245, 220, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(0, 212, 255, 0.3);
+  /* Cyan Glow on Hover */
+  box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
   transform: translateY(-2px);
 }
 

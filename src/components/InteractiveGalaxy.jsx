@@ -134,10 +134,10 @@ export default function InteractiveGalaxy() {
                 let y = Math.random() * canvas.height;
                 let size = (Math.random() * 2) + 0.5;
                 const colors = [
-                    'rgba(255, 255, 255, 0.9)',
-                    'rgba(200, 200, 255, 0.6)',
-                    'rgba(255, 215, 0, 0.4)', // Hint of gold
-                    'rgba(255, 255, 255, 0.2)'
+                    '#00d4ff', // Cyan
+                    '#ff9f43', // Orange
+                    '#ffffff', // White
+                    '#00d4ff80' // Cyan Transparent
                 ];
                 let color = colors[Math.floor(Math.random() * colors.length)];
                 particles.push(new Particle(x, y, size, color));

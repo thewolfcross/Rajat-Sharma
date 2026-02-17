@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiLinkedin, FiMail } from 'react-icons/fi';
+import { FiArrowRight, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
 import AnimatedCounter from '../components/AnimatedCounter';
 
 export default function Hero() {
@@ -121,6 +121,15 @@ export default function Hero() {
                         </a>
                         <a href="#contact" className="glow-btn glow-btn-outline">
                             Let's Connect
+                        </a>
+                        <a
+                            href="/resume.pdf"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="glow-btn glow-btn-outline"
+                            style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
+                        >
+                            Resume <FiDownload style={{ marginLeft: 6 }} />
                         </a>
                     </div>
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiSun, FiMoon, FiMenu, FiX } from 'react-icons/fi';
+import { FiSun, FiMoon, FiMenu, FiX, FiDownload } from 'react-icons/fi';
 
 const navLinks = [
     { label: 'About', href: '#about' },
@@ -108,6 +108,23 @@ export default function Navbar({ darkMode, setDarkMode }) {
                     >
                         {darkMode ? <FiSun size={16} /> : <FiMoon size={16} />}
                     </button>
+                    <a
+                        href="/resume.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="glow-btn glow-btn-primary"
+                        style={{
+                            padding: '8px 16px',
+                            fontSize: '0.85rem',
+                            textDecoration: 'none',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                            borderRadius: 8,
+                        }}
+                    >
+                        Resume <FiDownload size={16} />
+                    </a>
                 </div>
 
                 {/* Mobile Toggle */}
