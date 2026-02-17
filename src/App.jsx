@@ -4,6 +4,16 @@ import InteractiveGalaxy from './components/InteractiveGalaxy';
 import CursorGlow from './components/CursorGlow';
 import ThanosTrigger from './components/ThanosTrigger';
 import JethaTrigger from './components/JethaTrigger';
+import Navbar from './components/Navbar';
+import Hero from './sections/Hero';
+import About from './sections/About';
+import ImpactDashboard from './sections/ImpactDashboard';
+import Experience from './sections/Experience';
+import Skills from './sections/Skills';
+import CaseStudies from './sections/CaseStudies';
+import GamingZone from './sections/GamingZone';
+import Testimonials from './sections/Testimonials';
+import Contact from './sections/Contact';
 import SkeletonLoader from './components/SkeletonLoader';
 
 export default function App() {
@@ -38,7 +48,7 @@ export default function App() {
   return (
     <>
       <AnimatePresence>
-        {loading && <SkeletonLoader onComplete={() => setLoading(false)} />}
+        {loading && <PacmanLoader onComplete={() => setLoading(false)} />}
       </AnimatePresence>
       <InteractiveGalaxy darkMode={darkMode} />
       <CursorGlow />

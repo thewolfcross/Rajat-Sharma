@@ -190,6 +190,7 @@ export default function SkeletonLoader({ onComplete }) {
             {!doorOpen && (
                 <motion.div
                     className="skeleton-loader-container"
+                    initial={{ opacity: 1 }}
                     style={{
                         position: 'fixed', inset: 0, zIndex: 9999, background: '#050505',
                         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
@@ -197,7 +198,7 @@ export default function SkeletonLoader({ onComplete }) {
                     exit={{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }}
                     transition={{ duration: 0.8 }}
                 >
-                    <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0 }} />
+                    <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
 
                     <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', marginTop: '30vh' }}>
                         <motion.h2
