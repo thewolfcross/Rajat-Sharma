@@ -85,9 +85,14 @@ export default function InteractiveGalaxy() {
             for (let i = 0; i < numberOfParticles; i++) {
                 let x = Math.random() * canvas.width;
                 let y = Math.random() * canvas.height;
-                let size = (Math.random() * 2) + 1;
-                // Royal Purple Palette
-                const colors = ['rgba(224, 170, 255, 0.8)', 'rgba(157, 78, 221, 0.6)', 'rgba(60, 9, 108, 0.4)', 'rgba(255, 215, 0, 0.3)'];
+                let size = (Math.random() * 2) + 0.5; // Slightly smaller/varied for stars
+                // White / Silver Palette (Playful Stars)
+                const colors = [
+                    'rgba(255, 255, 255, 0.9)', // Bright White
+                    'rgba(255, 255, 255, 0.6)', // Soft White
+                    'rgba(200, 200, 220, 0.4)', // Faint Silver
+                    'rgba(255, 255, 255, 0.2)'  // Distant Star
+                ];
                 let color = colors[Math.floor(Math.random() * colors.length)];
                 particles.push(new Particle(x, y, size, color));
             }
@@ -96,10 +101,10 @@ export default function InteractiveGalaxy() {
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Deep Royal Gradient Background
+            // Pure Black Background
             const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, '#05010a');
-            gradient.addColorStop(1, '#1a0b2e');
+            gradient.addColorStop(0, '#000000');
+            gradient.addColorStop(1, '#080808'); // Subtle texture at bottom
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -118,8 +123,8 @@ export default function InteractiveGalaxy() {
                     if (distance < (canvas.width / 7) * (canvas.height / 7)) {
                         let opacityValue = 1 - (distance / 20000);
                         if (opacityValue > 0) {
-                            ctx.strokeStyle = `rgba(157, 78, 221, ${opacityValue * 0.2})`;
-                            ctx.lineWidth = 1;
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${opacityValue * 0.15})`; // White connections
+                            ctx.lineWidth = 0.8;
                             ctx.beginPath();
                             ctx.moveTo(particles[a].x, particles[a].y);
                             ctx.lineTo(particles[b].x, particles[b].y);
@@ -171,7 +176,7 @@ export default function InteractiveGalaxy() {
                 position: 'fixed',
                 inset: 0,
                 zIndex: -1,
-                background: '#05010a',
+                background: '#000000',
             }}
         />
     );
