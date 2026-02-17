@@ -9,6 +9,7 @@ import ImpactDashboard from './sections/ImpactDashboard';
 import Experience from './sections/Experience';
 import Skills from './sections/Skills';
 import CaseStudies from './sections/CaseStudies';
+import TicTacToe from './sections/TicTacToe';
 import Testimonials from './sections/Testimonials';
 import Contact from './sections/Contact';
 
@@ -32,6 +33,7 @@ export default function App() {
         <Experience />
         <Skills />
         <CaseStudies />
+        <TicTacToe />
         <Testimonials />
         <Contact />
       </main>
