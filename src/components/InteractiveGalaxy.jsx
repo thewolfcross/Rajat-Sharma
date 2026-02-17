@@ -7,9 +7,7 @@ export default function InteractiveGalaxy() {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         let animationId;
-
         let particles = [];
-        let shootingStars = [];
         let mouse = { x: null, y: null, radius: 150 };
 
         const resize = () => {
@@ -19,15 +17,14 @@ export default function InteractiveGalaxy() {
         };
 
         class Particle {
-            constructor(x, y, radius, color) {
-                this.x = x;
-                this.y = y;
-                this.baseX = x;
-                this.baseY = y;
-                this.radius = radius;
+            constructor(x, y, color) {
+                this.x = Math.random() * canvas.width; // Start random
+                this.y = Math.random() * canvas.height;
+                this.targetX = x; // The "Wolf" position
+                this.targetY = y;
+                this.radius = Math.random() * 2 + 1;
                 this.color = color;
                 this.density = (Math.random() * 30) + 1;
-                this.angle = Math.random() * 360; // For idle floating
             }
 
             draw() {
@@ -39,7 +36,17 @@ export default function InteractiveGalaxy() {
             }
 
             update() {
-                // Mouse interaction
+                // Breathing effect (Base position moves slightly)
+                const time = Date.now() * 0.001;
+                const breathScale = 1 + Math.sin(time) * 0.02;
+                const cx = canvas.width / 2;
+                const cy = canvas.height / 2;
+
+                // Calculate actual target with breathing
+                let tx = ((this.targetX - cx) * breathScale) + cx;
+                let ty = ((this.targetY - cy) * breathScale) + cy;
+
+                // Mouse Interaction
                 if (mouse.x) {
                     let dx = mouse.x - this.x;
                     let dy = mouse.y - this.y;
@@ -50,134 +57,113 @@ export default function InteractiveGalaxy() {
                         const forceDirectionY = dy / distance;
                         const maxDistance = mouse.radius;
                         const force = (maxDistance - distance) / maxDistance;
-                        const directionX = forceDirectionX * force * this.density;
-                        const directionY = forceDirectionY * force * this.density;
+                        const directionX = forceDirectionX * force * this.density * 5; // Strong repulsion
+                        const directionY = forceDirectionY * force * this.density * 5;
 
                         this.x -= directionX;
                         this.y -= directionY;
                     } else {
-                        // Return to base (Elastic snap)
-                        if (this.x !== this.baseX) {
-                            let dx = this.x - this.baseX;
-                            this.x -= dx / 20;
+                        // Return to Target (Elastic)
+                        if (this.x !== tx) {
+                            let dx = this.x - tx;
+                            this.x -= dx / 10;
                         }
-                        if (this.y !== this.baseY) {
-                            let dy = this.y - this.baseY;
-                            this.y -= dy / 20;
+                        if (this.y !== ty) {
+                            let dy = this.y - ty;
+                            this.y -= dy / 10;
                         }
                     }
                 } else {
-                    // Idle Float
-                    this.x += Math.cos(this.angle) * 0.1;
-                    this.y += Math.sin(this.angle) * 0.1;
-                    this.angle += 0.02;
-
-                    // Soft return if drifted too far
-                    let driftX = this.x - this.baseX;
-                    let driftY = this.y - this.baseY;
-                    if (Math.abs(driftX) > 20 || Math.abs(driftY) > 20) {
-                        this.x -= driftX / 100;
-                        this.y -= driftY / 100;
+                    // Return to Target (Idle)
+                    if (this.x !== tx) {
+                        let dx = this.x - tx;
+                        this.x -= dx / 15; // Slower snap back
+                    }
+                    if (this.y !== ty) {
+                        let dy = this.y - ty;
+                        this.y -= dy / 15;
                     }
                 }
                 this.draw();
             }
         }
 
-        class ShootingStar {
-            constructor() {
-                this.reset();
-            }
+        const isInsideWolf = (x, y, cx, cy, scale) => {
+            // Normalized coordinates relative to center
+            const nx = (x - cx) / scale;
+            const ny = (y - cy) / scale;
 
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * -100;
-                this.speed = (Math.random() * 15) + 10;
-                this.len = (Math.random() * 80) + 50;
-                this.size = (Math.random() * 2) + 0.1;
-                this.waitTime = new Date().getTime() + (Math.random() * 5000) + 1000;
-                this.active = false;
-            }
+            // Simple Wolf Head approximation using combined shapes
+            // 1. Snout (Triangle pointing down)
+            if (ny > 0 && ny < 0.6 && Math.abs(nx) < (0.3 - ny * 0.4)) return true;
+            // 2. Forehead (Rectangle-ish)
+            if (ny > -0.5 && ny <= 0 && Math.abs(nx) < 0.4) return true;
+            // 3. Ears (Triangles)
+            // Left Ear
+            if (nx < -0.2 && nx > -0.6 && ny < -0.3 && ny > -0.9 - (nx + 0.4)) return true;
+            // Right Ear
+            if (nx > 0.2 && nx < 0.6 && ny < -0.3 && ny > -0.9 + (nx - 0.4)) return true;
+            // 4. Cheeks (Side fluff)
+            if (ny > 0 && ny < 0.4 && Math.abs(nx) < 0.5 && Math.abs(nx) > 0.2) return true;
 
-            update() {
-                if (this.active) {
-                    this.x -= this.speed;
-                    this.y += this.speed;
-                    if (this.x < -100 || this.y > canvas.height + 100) {
-                        this.active = false;
-                        this.waitTime = new Date().getTime() + (Math.random() * 5000) + 1000;
-                    } else {
-                        ctx.lineWidth = this.size;
-                        ctx.beginPath();
-                        ctx.moveTo(this.x, this.y);
-                        ctx.lineTo(this.x + this.len, this.y - this.len);
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${Math.random() * 0.5 + 0.1})`;
-                        ctx.stroke();
-                    }
-                } else {
-                    if (this.waitTime < new Date().getTime()) {
-                        this.active = true;
-                        this.x = Math.random() * canvas.width + 200;
-                        this.y = -100;
-                    }
-                }
-            }
-        }
+            return false;
+        };
 
         const initParticles = () => {
             particles = [];
-            shootingStars = [];
-            const numberOfParticles = (canvas.width * canvas.height) / 8000; // Increased density
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            // Scale based on screen size (responsive)
+            const scale = Math.min(canvas.width, canvas.height) * 0.5;
 
-            for (let i = 0; i < numberOfParticles; i++) {
-                let x = Math.random() * canvas.width;
-                let y = Math.random() * canvas.height;
-                let size = (Math.random() * 2) + 0.5;
-                const colors = [
-                    '#00d4ff', // Cyan
-                    '#ff9f43', // Orange
-                    '#ffffff', // White
-                    '#00d4ff80' // Cyan Transparent
-                ];
-                let color = colors[Math.floor(Math.random() * colors.length)];
-                particles.push(new Particle(x, y, size, color));
-            }
+            // Generate particles inside the Wolf shape
+            const particleCount = canvas.width < 768 ? 200 : 400; // Efficient count
 
-            // Init Shooting Stars
-            for (let i = 0; i < 3; i++) {
-                shootingStars.push(new ShootingStar());
+            let attempts = 0;
+            while (particles.length < particleCount && attempts < 20000) {
+                const x = (Math.random() - 0.5) * scale * 1.5 + cx;
+                const y = (Math.random() - 0.5) * scale * 1.5 + cy;
+
+                if (isInsideWolf(x, y, cx, cy, scale / 1.2)) {
+                    // Cyber Colors
+                    const colors = ['#00d4ff', '#ff9f43', '#ffffff'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    particles.push(new Particle(x, y, color));
+                }
+                attempts++;
             }
         };
 
         const animate = () => {
-            // Clear with trails
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; // Trails effect
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Black Background
+            ctx.fillStyle = '#050505';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Connect particles
+            // Connect particles (The "Geometrical" part)
             connect();
 
             particles.forEach(p => p.update());
-            shootingStars.forEach(s => s.update());
-
             animationId = requestAnimationFrame(animate);
         };
 
         const connect = () => {
             for (let a = 0; a < particles.length; a++) {
                 for (let b = a; b < particles.length; b++) {
-                    let distance = ((particles[a].x - particles[b].x) * (particles[a].x - particles[b].x)) +
-                        ((particles[a].y - particles[b].y) * (particles[a].y - particles[b].y));
-                    if (distance < (canvas.width / 7) * (canvas.height / 7)) {
-                        let opacityValue = 1 - (distance / 20000);
-                        if (opacityValue > 0) {
-                            ctx.strokeStyle = `rgba(255, 255, 255, ${opacityValue * 0.1})`;
-                            ctx.lineWidth = 0.5;
-                            ctx.beginPath();
-                            ctx.moveTo(particles[a].x, particles[a].y);
-                            ctx.lineTo(particles[b].x, particles[b].y);
-                            ctx.stroke();
-                        }
+                    const dx = particles[a].x - particles[b].x;
+                    const dy = particles[a].y - particles[b].y;
+                    const distance = dx * dx + dy * dy;
+
+                    // Dynamic connection distance
+                    if (distance < 5000) {
+                        const opacity = 1 - (distance / 5000);
+                        ctx.strokeStyle = `rgba(0, 212, 255, ${opacity * 0.25})`; // Cyan connections
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
                     }
                 }
             }
@@ -196,14 +182,14 @@ export default function InteractiveGalaxy() {
         };
 
         const onClick = () => {
-            mouse.radius = 400; // Shockwave
-            setTimeout(() => mouse.radius = 150, 300);
+            mouse.radius = 500; // Huge shockwave
+            setTimeout(() => mouse.radius = 150, 400);
         };
 
         const onLeave = () => {
             mouse.x = null;
             mouse.y = null;
-        };
+        }
 
         window.addEventListener('resize', resize);
         window.addEventListener('mousemove', onMouseMove);
@@ -231,7 +217,7 @@ export default function InteractiveGalaxy() {
                 position: 'fixed',
                 inset: 0,
                 zIndex: -1,
-                background: '#000000',
+                background: '#050505',
             }}
         />
     );
