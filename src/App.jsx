@@ -14,7 +14,7 @@ import CaseStudies from './sections/CaseStudies';
 import GamingZone from './sections/GamingZone';
 import Testimonials from './sections/Testimonials';
 import Contact from './sections/Contact';
-import SkeletonLoader from './components/SkeletonLoader';
+import PacmanLoader from './components/PacmanLoader';
 
 export default function App() {
   const [loading, setLoading] = useState(true);
