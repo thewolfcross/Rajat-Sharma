@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiSun, FiMoon, FiMenu, FiX, FiDownload } from 'react-icons/fi';
+import BatmanLogo from './BatmanLogo';
 
 const navLinks = [
     { label: 'About', href: '#about' },
@@ -53,16 +54,8 @@ export default function Navbar({ darkMode, setDarkMode }) {
                 justifyContent: 'space-between',
             }}>
                 {/* Logo */}
-                <a href="#" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: '1.4rem',
-                        fontWeight: 700,
-                        letterSpacing: '-0.02em',
-                    }}>
-                        <span className="gradient-text">R</span>
-                        <span style={{ color: darkMode ? '#e4e4e7' : '#1e293b' }}>S</span>
-                    </span>
+                <a href="#" style={{ textDecoration: 'none' }}>
+                    <BatmanLogo size={40} />
                 </a>
 
                 {/* Desktop Links */}
