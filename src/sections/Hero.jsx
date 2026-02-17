@@ -38,7 +38,12 @@ export default function Hero() {
                 pointerEvents: 'none',
             }} />
 
-            <div className="section-container" style={{ width: '100%', paddingTop: 120, paddingBottom: 80 }}>
+            <div className="section-container hero-padding" style={{ width: '100%', paddingTop: 120, paddingBottom: 80 }}>
+                <style>{`
+                    @media (max-width: 768px) {
+                        .hero-padding { paddingTop: 100px !important; paddingBottom: 60px !important; }
+                    }
+                `}</style>
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}

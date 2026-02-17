@@ -176,7 +176,14 @@ export default function CaseStudies() {
                                     padding: '40px 36px',
                                     position: 'relative',
                                 }}
+                                className="modal-content"
                             >
+                                <style>{`
+                                    .modal-content { padding: 40px 36px; }
+                                    @media (max-width: 600px) {
+                                        .modal-content { padding: 24px 20px !important; }
+                                    }
+                                `}</style>
                                 <button
                                     onClick={() => setSelected(null)}
                                     style={{

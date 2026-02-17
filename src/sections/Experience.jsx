@@ -72,11 +72,12 @@ export default function Experience() {
                                 background: `linear-gradient(90deg, ${exp.color}, transparent)`,
                             }} />
 
-                            <div style={{ padding: '28px 32px' }}>
-                                <div style={{
+                            <div className="experience-card-padding" style={{ padding: '28px 32px' }}>
+                                <div className="experience-header" style={{
                                     display: 'flex',
                                     justifyContent: 'space-between',
                                     alignItems: 'center',
+                                    position: 'relative'
                                 }}>
                                     <div>
                                         <div style={{
@@ -101,6 +102,7 @@ export default function Experience() {
                                         </p>
                                     </div>
                                     <motion.div
+                                        className="experience-toggle"
                                         animate={{ rotate: expanded === i ? 180 : 0 }}
                                         transition={{ duration: 0.2 }}
                                         style={{
@@ -159,6 +161,13 @@ export default function Experience() {
                         </motion.div>
                     ))}
                 </div>
+                <style>{`
+                  @media (max-width: 600px) {
+                    .experience-card-padding { padding: 20px !important; }
+                    .experience-header { flex-direction: column; align-items: flex-start !important; gap: 12px; }
+                    .experience-toggle { position: absolute; top: 20px; right: 20px; }
+                  }
+                `}</style>
             </div>
         </SectionWrapper>
     );
