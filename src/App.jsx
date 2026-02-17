@@ -1,21 +1,13 @@
 import { useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import InteractiveGalaxy from './components/InteractiveGalaxy';
 import CursorGlow from './components/CursorGlow';
 import ThanosTrigger from './components/ThanosTrigger';
 import JethaTrigger from './components/JethaTrigger';
-import LoadingScreen from './components/LoadingScreen';
-import Navbar from './components/Navbar';
-import Hero from './sections/Hero';
-import About from './sections/About';
-import ImpactDashboard from './sections/ImpactDashboard';
-import Experience from './sections/Experience';
-import Skills from './sections/Skills';
-import CaseStudies from './sections/CaseStudies';
-import GamingZone from './sections/GamingZone';
-import Testimonials from './sections/Testimonials';
-import Contact from './sections/Contact';
+import SkeletonLoader from './components/SkeletonLoader';
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
   const [thanosMode, setThanosMode] = useState(false);
   const [jethaMode, setJethaMode] = useState(false); // Added jethaMode state
@@ -45,7 +37,9 @@ export default function App() {
 
   return (
     <>
-      <LoadingScreen />
+      <AnimatePresence>
+        {loading && <SkeletonLoader onComplete={() => setLoading(false)} />}
+      </AnimatePresence>
       <InteractiveGalaxy darkMode={darkMode} />
       <CursorGlow />
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
