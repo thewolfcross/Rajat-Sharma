@@ -127,7 +127,7 @@ export default function Hero() {
                     {/* Social */}
                     <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
                         <a
-                            href="https://linkedin.com/in/rajatsharma"
+                            href="https://www.linkedin.com/in/rajat-sharma-4a2141129"
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{

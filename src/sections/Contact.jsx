@@ -88,7 +88,7 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <div style={{ fontSize: '0.75rem', opacity: 0.5, marginBottom: 2 }}>LinkedIn</div>
-                                    <a href="https://linkedin.com/in/rajatsharma" target="_blank" rel="noopener noreferrer" style={{
+                                    <a href="https://www.linkedin.com/in/rajat-sharma-4a2141129" target="_blank" rel="noopener noreferrer" style={{
                                         color: 'var(--color-accent)',
                                         textDecoration: 'none',
                                         fontSize: '0.9rem',
