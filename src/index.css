@@ -31,10 +31,13 @@
 html {
   scroll-behavior: smooth;
   font-family: var(--font-body);
+  background: var(--color-dark-bg);
+  /* Fallback background */
 }
 
 body {
-  background: var(--color-dark-bg);
+  background: transparent;
+  /* Transparent to show GothamRain canvas */
   color: var(--color-dark-text);
   overflow-x: hidden;
   transition: background 0.4s ease, color 0.4s ease;
