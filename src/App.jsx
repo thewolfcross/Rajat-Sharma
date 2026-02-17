@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import ParticleBackground from './components/ParticleBackground';
+import InteractiveGalaxy from './components/InteractiveGalaxy';
 import CursorGlow from './components/CursorGlow';
 import LoadingScreen from './components/LoadingScreen';
 import Navbar from './components/Navbar';
@@ -23,7 +23,7 @@ export default function App() {
   return (
     <>
       <LoadingScreen />
-      <ParticleBackground />
+      <InteractiveGalaxy />
       <CursorGlow />
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
       <main style={{ position: 'relative', zIndex: 2 }}>
