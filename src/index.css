@@ -349,3 +349,22 @@ body.light-mode .timeline-dot {
     padding: 80px 16px;
   }
 }
+
+/* ===== Thanos Snap Mode ===== */
+.section-essential,
+.section-non-essential {
+  transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.thanos-active .section-non-essential {
+  opacity: 0.1;
+  filter: blur(4px) grayscale(100%);
+  pointer-events: none;
+  transform: scale(0.98);
+}
+
+.thanos-active .section-essential {
+  transform: scale(1.02);
+  z-index: 10;
+  filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.15));
+}
