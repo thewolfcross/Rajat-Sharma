@@ -12,8 +12,8 @@ import batmanIcon from '../assets/16277159-08f2-44c0-b3b7-39162de53f71.png'; // 
 // Game 3: Yahtzee (Jetha vs Joker)
 
 import jethaIcon from '../assets/16277159-08f2-44c0-b3b7-39162de53f71.png';
-import jokerIcon from '../assets/202408241250_mhthje3k54O3TxBr.png';
-import batIcon from '../assets/minimalist-thanos-icon-png-78-dn7gu50nv9qwtcos.webp'; // Placeholder or use the one from TicTacToe logic
+import jokerIcon from '../assets/Joker-9.webp';
+import batIcon from '../assets/batman-68-269x300.webp';
 
 // --- TIC TAC TOE (Preserved) ---
 const TicTacToeGame = () => {
@@ -34,7 +34,7 @@ const TicTacToeGame = () => {
             const timer = setTimeout(() => {
                 const available = board.map((v, i) => v === null ? i : null).filter(v => v !== null);
                 if (available.length > 0) {
-                    const move = available[Math.floor(Math.random() * available.length)]; // Simplified for brevity in merged file
+                    const move = available[Math.floor(Math.random() * available.length)];
                     const newBoard = [...board];
                     newBoard[move] = 'joker';
                     setBoard(newBoard);
@@ -56,7 +56,7 @@ const TicTacToeGame = () => {
     const handleClick = (i) => {
         if (board[i] || !isPlayerTurn || winner) return;
         const newBoard = [...board];
-        newBoard[i] = 'batman'; // Keeping Batman logic for consistency with previous request
+        newBoard[i] = 'batman';
         setBoard(newBoard);
         checkWinner(newBoard);
         setIsPlayerTurn(false);
@@ -67,13 +67,37 @@ const TicTacToeGame = () => {
             <h3 className="text-xl font-bold mb-4 text-[#ffd700]">Batman vs Joker</h3>
             <div className="grid grid-cols-3 gap-2 p-3 bg-white/5 rounded-xl">
                 {board.map((c, i) => (
-                    <button key={i} onClick={() => handleClick(i)} className="w-16 h-16 bg-white/5 rounded-lg text-2xl flex items-center justify-center">
-                        {c === 'batman' && '🦇'}
-                        {c === 'joker' && <img src={jokerIcon} className="w-10 h-10 object-contain" alt="Joker" />}
+                    <button key={i} onClick={() => handleClick(i)} className="w-20 h-20 sm:w-24 sm:h-24 bg-white/5 rounded-lg text-2xl flex items-center justify-center overflow-hidden relative">
+                        {c === 'batman' && (
+                            <motion.img
+                                src={batIcon}
+                                alt="Batman"
+                                className="w-16 h-16 object-contain drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]"
+                                initial={{ scale: 0, rotate: -45 }}
+                                animate={{ scale: 1, rotate: 0 }}
+                            />
+                        )}
+                        {c === 'joker' && (
+                            <motion.img
+                                src={jokerIcon}
+                                alt="Joker"
+                                className="w-16 h-16 object-contain drop-shadow-[0_0_10px_rgba(114,9,183,0.5)]"
+                                initial={{ scale: 0, rotate: 45 }}
+                                animate={{ scale: 1, rotate: 0 }}
+                            />
+                        )}
                     </button>
                 ))}
             </div>
-            <div className="mt-4 h-6 text-sm text-gray-400">{winner ? (winner === 'draw' ? 'Draw!' : `${winner === 'batman' ? 'Batman' : 'Joker'} Wins!`) : (isPlayerTurn ? 'Your Turn' : 'Joker Thinking...')}</div>
+            <div className="mt-6 h-8 text-lg font-bold tracking-wider">
+                {winner ? (
+                    <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={winner === 'batman' ? 'text-[#ffd700]' : winner === 'joker' ? 'text-[#7209b7]' : 'text-gray-400'}>
+                        {winner === 'draw' ? 'STALEMATE' : `${winner === 'batman' ? 'BATMAN' : 'JOKER'} WINS!`}
+                    </motion.span>
+                ) : (
+                    <span className="text-gray-500 text-sm font-mono">{isPlayerTurn ? 'YOUR TURN' : 'OPPONENT THINKING...'}</span>
+                )}
+            </div>
         </div>
     );
 };
