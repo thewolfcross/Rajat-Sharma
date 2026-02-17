@@ -18,8 +18,8 @@ export default function Contact() {
         width: '100%',
         padding: '14px 16px',
         borderRadius: 12,
-        border: '1px solid var(--color-dark-border)',
-        background: 'rgba(26, 26, 46, 0.4)',
+        border: '1px solid rgba(245, 245, 220, 0.15)', // Beige border
+        background: 'rgba(245, 245, 220, 0.05)', // Glassy Beige input
         color: 'var(--color-dark-text)',
         fontSize: '0.9rem',
         fontFamily: 'var(--font-body)',
