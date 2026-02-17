@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export default function InteractiveGalaxy() {
+export default function InteractiveGalaxy({ darkMode }) {
     const canvasRef = useRef(null);
 
     useEffect(() => {
@@ -36,7 +36,7 @@ export default function InteractiveGalaxy() {
             }
 
             update() {
-                // Breathing effect (Base position moves slightly)
+                // Interactive breathing (slower in light mode maybe? Keeping same)
                 const time = Date.now() * 0.001;
                 const breathScale = 1 + Math.sin(time) * 0.02;
                 const cx = canvas.width / 2;
@@ -125,9 +125,14 @@ export default function InteractiveGalaxy() {
                 const y = (Math.random() - 0.5) * scale * 1.5 + cy;
 
                 if (isInsideWolf(x, y, cx, cy, scale / 1.2)) {
-                    // Cyber Colors
-                    const colors = ['#00d4ff', '#ff9f43', '#ffffff'];
-                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    let color;
+                    if (darkMode) {
+                        const colors = ['#00d4ff', '#ff9f43', '#ffffff']; // Cyber
+                        color = colors[Math.floor(Math.random() * colors.length)];
+                    } else {
+                        const colors = ['#1a1a1a', '#333333', '#00d4ff']; // Dark/Grey/Cyan
+                        color = colors[Math.floor(Math.random() * colors.length)];
+                    }
                     particles.push(new Particle(x, y, color));
                 }
                 attempts++;
@@ -137,8 +142,8 @@ export default function InteractiveGalaxy() {
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Black Background
-            ctx.fillStyle = '#050505';
+            // Dynamic Background
+            ctx.fillStyle = darkMode ? '#050505' : '#ffffff';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // Connect particles (The "Geometrical" part)
@@ -158,7 +163,12 @@ export default function InteractiveGalaxy() {
                     // Dynamic connection distance
                     if (distance < 5000) {
                         const opacity = 1 - (distance / 5000);
-                        ctx.strokeStyle = `rgba(0, 212, 255, ${opacity * 0.25})`; // Cyan connections
+                        // Dynamic Line Color
+                        const stroke = darkMode
+                            ? `rgba(0, 212, 255, ${opacity * 0.25})` // Cyan in Dark
+                            : `rgba(0, 0, 0, ${opacity * 0.15})`;   // Black in Light
+
+                        ctx.strokeStyle = stroke;
                         ctx.lineWidth = 1;
                         ctx.beginPath();
                         ctx.moveTo(particles[a].x, particles[a].y);
@@ -208,7 +218,7 @@ export default function InteractiveGalaxy() {
             window.removeEventListener('click', onClick);
             window.removeEventListener('mouseout', onLeave);
         };
-    }, []);
+    }, [darkMode]); // Re-run when darkMode changes
 
     return (
         <canvas
@@ -217,7 +227,8 @@ export default function InteractiveGalaxy() {
                 position: 'fixed',
                 inset: 0,
                 zIndex: -1,
-                background: '#050505',
+                background: darkMode ? '#050505' : '#ffffff',
+                transition: 'background 0.5s ease'
             }}
         />
     );

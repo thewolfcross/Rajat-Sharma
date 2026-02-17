@@ -18,9 +18,9 @@ export default function Contact() {
         width: '100%',
         padding: '14px 16px',
         borderRadius: 12,
-        border: '1px solid rgba(0, 212, 255, 0.2)', // Cyan Border
-        background: 'rgba(5, 5, 5, 0.8)', // Deep Dark Input
-        color: 'var(--color-dark-text)',
+        border: '1px solid var(--input-border)',
+        background: 'var(--input-bg)',
+        color: 'var(--input-text)',
         fontSize: '0.9rem',
         fontFamily: 'var(--font-body)',
         outline: 'none',

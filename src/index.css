@@ -12,17 +12,22 @@
   /* Deep Black */
   --color-dark-surface: #0a0a0f;
   /* Near Black */
-  --color-dark-text: #f0f4f8;
-  /* Cool White */
-  --color-dark-muted: #94a3b8;
-  /* Cool Grey */
+  --color-dark-text: #ffffff;
+  /* Pure White */
+  --color-dark-muted: #cbd5e1;
+  /* Light Grey */
   --color-dark-border: rgba(0, 212, 255, 0.1);
   /* Cyan hint */
+  --input-bg: rgba(5, 5, 5, 0.8);
+  --input-border: rgba(0, 212, 255, 0.2);
+  --input-text: var(--color-dark-text);
 
-  --color-light-bg: #f8f9fc;
-  --color-light-surface: #ffffff;
-  --color-light-text: #1e293b;
-  --color-light-muted: #64748b;
+  --color-light-bg: #ffffff;
+  --color-light-surface: #f8f9fa;
+  --color-light-text: #000000;
+  /* Pure Black */
+  --color-light-muted: #334155;
+  /* Dark Grey */
   --color-light-border: #e2e8f0;
 
   --font-heading: 'Space Grotesk', sans-serif;

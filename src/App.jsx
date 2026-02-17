@@ -46,7 +46,7 @@ export default function App() {
   return (
     <>
       <LoadingScreen />
-      <InteractiveGalaxy />
+      <InteractiveGalaxy darkMode={darkMode} />
       <CursorGlow />
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
