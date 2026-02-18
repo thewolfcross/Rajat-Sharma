@@ -10,6 +10,7 @@ const jobs = [
 ];
 
 export default function BatmanJobLoader({ onComplete }) {
+    const targetScore = jobs.length;
     const [currentIndex, setCurrentIndex] = useState(0);
     const [accepted, setAccepted] = useState(0);
     const [swipeDir, setSwipeDir] = useState(null);
