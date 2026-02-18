@@ -15,6 +15,7 @@ import Contact from './sections/Contact';
 import PortfolioLoader from './components/PortfolioLoader';
 import SelectionGate from './components/SelectionGate';
 import MiniGame from './components/MiniGame';
+import CustomCursor from './components/CustomCursor';
 
 export default function App() {
   const [appState, setAppState] = useState('selecting'); // 'selecting', 'game', 'loading', 'profile'
