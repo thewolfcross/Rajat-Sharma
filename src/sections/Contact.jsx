@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import SectionWrapper from '../components/SectionWrapper';
 import { FiSend, FiMail, FiLinkedin, FiMapPin, FiCheck } from 'react-icons/fi';
 
-export default function Contact() {
+export default function Contact({ darkMode }) {
     const [submitted, setSubmitted] = useState(false);
     const [form, setForm] = useState({ name: '', email: '', message: '' });
 
@@ -63,7 +63,7 @@ export default function Contact() {
                                     <FiMail size={18} />
                                 </div>
                                 <div>
-                                    <div style={{ fontSize: '0.75rem', opacity: 0.5, marginBottom: 2 }}>Email</div>
+                                    <div style={{ fontSize: '0.75rem', opacity: darkMode ? 0.5 : 0.8, color: darkMode ? 'inherit' : '#334155', marginBottom: 2 }}>Email</div>
                                     <a href="mailto:sharmarajat1197@gmail.com" style={{
                                         color: 'var(--color-primary)',
                                         textDecoration: 'none',
@@ -87,7 +87,7 @@ export default function Contact() {
                                     <FiLinkedin size={18} />
                                 </div>
                                 <div>
-                                    <div style={{ fontSize: '0.75rem', opacity: 0.5, marginBottom: 2 }}>LinkedIn</div>
+                                    <div style={{ fontSize: '0.75rem', opacity: darkMode ? 0.5 : 0.8, color: darkMode ? 'inherit' : '#334155', marginBottom: 2 }}>LinkedIn</div>
                                     <a href="https://www.linkedin.com/in/rajat-sharma-4a2141129" target="_blank" rel="noopener noreferrer" style={{
                                         color: 'var(--color-accent)',
                                         textDecoration: 'none',
@@ -111,7 +111,7 @@ export default function Contact() {
                                     <FiMapPin size={18} />
                                 </div>
                                 <div>
-                                    <div style={{ fontSize: '0.75rem', opacity: 0.5, marginBottom: 2 }}>Location</div>
+                                    <div style={{ fontSize: '0.75rem', opacity: darkMode ? 0.5 : 0.8, color: darkMode ? 'inherit' : '#334155', marginBottom: 2 }}>Location</div>
                                     <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>Hyderabad, India</span>
                                 </div>
                             </div>
@@ -173,7 +173,8 @@ export default function Contact() {
                     borderTop: '1px solid var(--color-dark-border)',
                     textAlign: 'center',
                     fontSize: '0.8rem',
-                    opacity: 0.4,
+                    opacity: darkMode ? 0.4 : 0.7,
+                    color: darkMode ? 'inherit' : '#334155',
                 }}>
                     <p>© 2025 Rajat Sharma. Designed with strategy in mind.</p>
                 </div>

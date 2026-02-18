@@ -35,7 +35,7 @@ const skillCategories = [
     },
 ];
 
-function SkillBar({ name, level, color, delay }) {
+function SkillBar({ name, level, color, delay, darkMode }) {
     const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true });
 
     return (
@@ -46,10 +46,10 @@ function SkillBar({ name, level, color, delay }) {
                 marginBottom: 8,
                 fontSize: '0.85rem',
             }}>
-                <span style={{ fontWeight: 500 }}>{name}</span>
+                <span style={{ fontWeight: 500, color: darkMode ? 'inherit' : '#1e293b' }}>{name}</span>
                 <span style={{ color, fontWeight: 600 }}>{level}%</span>
             </div>
-            <div className="skill-bar-bg">
+            <div className="skill-bar-bg" style={{ background: darkMode ? 'var(--color-dark-border)' : 'rgba(0,0,0,0.05)' }}>
                 <motion.div
                     className="skill-bar-fill"
                     initial={{ width: 0 }}
@@ -64,7 +64,7 @@ function SkillBar({ name, level, color, delay }) {
     );
 }
 
-export default function Skills() {
+export default function Skills({ darkMode }) {
     return (
         <SectionWrapper id="skills">
             <div className="section-container">
@@ -107,7 +107,9 @@ export default function Skills() {
                                 fontSize: '1.1rem',
                                 fontWeight: 600,
                                 marginBottom: 28,
-                                color: cat.color,
+                                color: darkMode ? cat.color : '#000',
+                                borderBottom: !darkMode ? `2px solid ${cat.color}40` : 'none',
+                                paddingBottom: !darkMode ? 8 : 0
                             }}>
                                 {cat.title}
                             </h3>
@@ -118,6 +120,7 @@ export default function Skills() {
                                     level={skill.level}
                                     color={cat.color}
                                     delay={si + ci * 4}
+                                    darkMode={darkMode}
                                 />
                             ))}
                         </motion.div>

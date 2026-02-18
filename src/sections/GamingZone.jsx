@@ -52,7 +52,7 @@ const TicTacToeGame = () => {
 
     return (
         <div className="flex flex-col items-center">
-            <h3 className="text-xl font-bold mb-4 text-[#00d4ff]">Strategic Arena (You vs AI)</h3>
+            <h3 className="text-xl font-bold mb-4" style={{ color: darkMode ? '#00d4ff' : '#0090ad' }}>Strategic Arena (You vs AI)</h3>
             <div className="grid grid-cols-3 gap-2 p-3 bg-white/5 rounded-xl">
                 {board.map((c, i) => (
                     <button key={i} onClick={() => handleClick(i)} className="w-20 h-20 sm:w-24 sm:h-24 bg-white/5 rounded-lg text-2xl flex items-center justify-center overflow-hidden relative">
@@ -90,7 +90,7 @@ const TicTacToeGame = () => {
     );
 };
 
-export default function GamingZone() {
+export default function GamingZone({ darkMode }) {
     return (
         <SectionWrapper id="gaming-zone" className="py-20">
             <div className="section-container flex flex-col items-center">
@@ -101,7 +101,7 @@ export default function GamingZone() {
 
                 {/* Game Container */}
                 <div className="w-full max-w-2xl min-h-[400px] glass-card p-6 md:p-12 flex flex-col items-center justify-center relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00d4ff] to-transparent opacity-50"></div>
+                    <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[${darkMode ? '#00d4ff' : 'var(--color-primary)'}] to-transparent opacity-50`}></div>
                     <TicTacToeGame />
                 </div>
             </div>

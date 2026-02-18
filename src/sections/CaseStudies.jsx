@@ -39,7 +39,7 @@ const caseStudies = [
     },
 ];
 
-export default function CaseStudies() {
+export default function CaseStudies({ darkMode }) {
     const [selected, setSelected] = useState(null);
 
     return (
@@ -166,9 +166,9 @@ export default function CaseStudies() {
                                 transition={{ duration: 0.3 }}
                                 onClick={(e) => e.stopPropagation()}
                                 style={{
-                                    background: 'var(--color-dark-surface)',
+                                    background: darkMode ? 'var(--color-dark-surface)' : 'var(--color-light-bg)',
                                     borderRadius: 20,
-                                    border: `1px solid ${caseStudies[selected].color}20`,
+                                    border: `1px solid ${caseStudies[selected].color}${darkMode ? '20' : '40'}`,
                                     maxWidth: 700,
                                     width: '100%',
                                     maxHeight: '85vh',
@@ -251,7 +251,7 @@ export default function CaseStudies() {
                                         }}>
                                             {section.icon} {section.title}
                                         </div>
-                                        <p style={{ fontSize: '0.92rem', lineHeight: 1.7, opacity: 0.8 }}>
+                                        <p style={{ fontSize: '0.92rem', lineHeight: 1.7, opacity: darkMode ? 0.8 : 0.95, color: darkMode ? 'inherit' : '#334155' }}>
                                             {section.content}
                                         </p>
                                     </motion.div>
@@ -270,8 +270,8 @@ export default function CaseStudies() {
                                             style={{
                                                 padding: '14px 16px',
                                                 borderRadius: 10,
-                                                background: `${caseStudies[selected].color}08`,
-                                                border: `1px solid ${caseStudies[selected].color}15`,
+                                                background: darkMode ? `${caseStudies[selected].color}08` : `${caseStudies[selected].color}12`,
+                                                border: `1px solid ${caseStudies[selected].color}${darkMode ? '15' : '30'}`,
                                                 fontSize: '0.85rem',
                                                 fontWeight: 600,
                                                 color: caseStudies[selected].color,

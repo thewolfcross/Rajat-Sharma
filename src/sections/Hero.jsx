@@ -60,11 +60,11 @@ export default function Hero({ darkMode }) {
                             gap: 8,
                             padding: '8px 16px',
                             borderRadius: 100,
-                            border: '1px solid rgba(0,212,255,0.2)',
-                            background: 'rgba(0,212,255,0.05)',
+                            border: `1px solid ${darkMode ? 'rgba(0,212,255,0.2)' : 'rgba(0,212,255,0.4)'}`,
+                            background: darkMode ? 'rgba(0,212,255,0.05)' : 'rgba(0,212,255,0.08)',
                             fontSize: '0.8rem',
                             fontWeight: 500,
-                            color: 'var(--color-primary)',
+                            color: darkMode ? 'var(--color-primary)' : '#0090ad',
                             marginBottom: 32,
                         }}
                     >
@@ -97,7 +97,8 @@ export default function Hero({ darkMode }) {
                         lineHeight: 1.7,
                         maxWidth: 620,
                         marginBottom: 16,
-                        opacity: 0.7,
+                        opacity: darkMode ? 0.7 : 0.85,
+                        color: darkMode ? 'inherit' : '#1e293b',
                     }}>
                         Marketing & Business Development Strategist driving{' '}
                         <span style={{ color: 'var(--color-primary)', fontWeight: 600 }}>

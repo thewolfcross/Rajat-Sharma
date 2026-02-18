@@ -12,7 +12,7 @@ const metrics = [
     { icon: <FiGlobe size={22} />, value: 50, suffix: 'Cr', label: 'Pipeline Added', color: '#ffaa00' },
 ];
 
-export default function ImpactDashboard() {
+export default function ImpactDashboard({ darkMode }) {
     return (
         <SectionWrapper id="impact">
             <div className="section-container">
@@ -63,11 +63,11 @@ export default function ImpactDashboard() {
                                 width: 48,
                                 height: 48,
                                 borderRadius: 12,
-                                background: `${m.color}15`,
+                                background: darkMode ? `${m.color}15` : `${m.color}25`,
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                color: m.color,
+                                color: darkMode ? m.color : '#b48a00',
                                 marginBottom: 20,
                             }}>
                                 {m.icon}
@@ -79,14 +79,15 @@ export default function ImpactDashboard() {
                                 fontWeight: 700,
                                 letterSpacing: '-0.02em',
                                 marginBottom: 6,
-                                color: m.color,
+                                color: darkMode ? m.color : '#b48a00',
                             }}>
                                 <AnimatedCounter target={m.value} prefix={m.prefix || ''} suffix={m.suffix || ''} duration={2000} />
                             </div>
 
                             <div style={{
                                 fontSize: '0.85rem',
-                                opacity: 0.6,
+                                opacity: darkMode ? 0.6 : 0.8,
+                                color: darkMode ? 'inherit' : '#334155',
                                 fontWeight: 500,
                             }}>
                                 {m.label}

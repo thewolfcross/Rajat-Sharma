@@ -32,7 +32,7 @@ const experiences = [
     },
 ];
 
-export default function Experience() {
+export default function Experience({ darkMode }) {
     const [expanded, setExpanded] = useState(null);
 
     return (
@@ -129,7 +129,7 @@ export default function Experience() {
                                             <div style={{
                                                 marginTop: 24,
                                                 paddingTop: 24,
-                                                borderTop: '1px solid rgba(255,255,255,0.06)',
+                                                borderTop: `1px solid ${darkMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
                                                 display: 'flex',
                                                 flexDirection: 'column',
                                                 gap: 14,
@@ -146,7 +146,8 @@ export default function Experience() {
                                                             alignItems: 'start',
                                                             fontSize: '0.9rem',
                                                             lineHeight: 1.5,
-                                                            opacity: 0.8,
+                                                            opacity: darkMode ? 0.8 : 0.95,
+                                                            color: darkMode ? 'inherit' : '#334155',
                                                         }}
                                                     >
                                                         <span style={{ color: exp.color, marginTop: 2, flexShrink: 0 }}>{h.icon}</span>

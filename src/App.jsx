@@ -87,13 +87,13 @@ export default function App() {
                     transition: { duration: 1.5, ease: "easeOut" }
                   }}
                 >
-                  <About />
+                  <About darkMode={darkMode} />
                 </motion.div>
               )}
             </AnimatePresence>
 
-            <ImpactDashboard />
-            <Experience />
+            <ImpactDashboard darkMode={darkMode} />
+            <Experience darkMode={darkMode} />
 
             <AnimatePresence>
               {!thanosMode && (
@@ -107,15 +107,15 @@ export default function App() {
                     transition: { duration: 2, ease: "easeOut" }
                   }}
                 >
-                  <Skills />
-                  <CaseStudies />
-                  <GamingZone />
-                  <Testimonials />
+                  <Skills darkMode={darkMode} />
+                  <CaseStudies darkMode={darkMode} />
+                  <GamingZone darkMode={darkMode} />
+                  <Testimonials darkMode={darkMode} />
                 </motion.div>
               )}
             </AnimatePresence>
 
-            <Contact />
+            <Contact darkMode={darkMode} />
           </main>
 
           <ThanosTrigger isActive={thanosMode} toggle={toggleThanos} />

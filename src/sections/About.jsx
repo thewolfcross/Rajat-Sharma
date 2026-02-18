@@ -26,7 +26,7 @@ const timelineData = [
     },
 ];
 
-export default function About() {
+export default function About({ darkMode }) {
     return (
         <SectionWrapper id="about">
             <div className="section-container">
@@ -74,7 +74,7 @@ export default function About() {
                                     }}>
                                         {stat.value}
                                     </div>
-                                    <div style={{ fontSize: '0.75rem', opacity: 0.5 }}>{stat.label}</div>
+                                    <div style={{ fontSize: '0.75rem', opacity: darkMode ? 0.5 : 0.7 }}>{stat.label}</div>
                                 </div>
                             ))}
                         </div>
@@ -98,7 +98,7 @@ export default function About() {
                                         position: 'relative',
                                     }}
                                 >
-                                    <div className="timeline-dot" style={{ position: 'absolute', left: -48 }}>
+                                    <div className="timeline-dot" style={{ position: 'absolute', left: -48, background: darkMode ? 'var(--color-dark-bg)' : 'var(--color-light-bg)' }}>
                                         <span style={{ color: 'var(--color-primary)', fontSize: 14 }}>{item.icon}</span>
                                     </div>
                                     <div>
@@ -119,10 +119,10 @@ export default function About() {
                                         }}>
                                             {item.role}
                                         </h3>
-                                        <div style={{ fontSize: '0.85rem', opacity: 0.5, marginBottom: 8 }}>
+                                        <div style={{ fontSize: '0.85rem', opacity: darkMode ? 0.5 : 0.7, marginBottom: 8 }}>
                                             {item.company}
                                         </div>
-                                        <p style={{ fontSize: '0.9rem', lineHeight: 1.6, opacity: 0.7 }}>
+                                        <p style={{ fontSize: '0.9rem', lineHeight: 1.6, opacity: darkMode ? 0.7 : 0.85 }}>
                                             {item.description}
                                         </p>
                                     </div>
