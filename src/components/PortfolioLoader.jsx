@@ -51,15 +51,16 @@ export default function PortfolioLoader({ onComplete }) {
             }} />
 
             <div style={{ textAlign: 'center', marginBottom: 30, zIndex: 1, pointerEvents: 'none' }}>
-                <h2 style={{ color: '#00d4ff', letterSpacing: '4px', textTransform: 'uppercase', fontSize: '0.8rem', marginBottom: 10, opacity: 0.8 }}>
-                    System Status: Reviewing Opportunities
-                </h2>
-                <h1 style={{ color: '#ffffff', fontSize: '1.4rem', fontWeight: 800 }}>
-                    FINDING THE PERFECT MATCH...
+                <h1 style={{
+                    color: '#ffffff',
+                    fontSize: '2.5rem',
+                    fontWeight: 800,
+                    letterSpacing: '12px',
+                    textTransform: 'uppercase',
+                    margin: 0
+                }}>
+                    WELCOME
                 </h1>
-                <p style={{ color: 'rgba(255,255,255,0.4)', marginTop: 8, fontSize: '0.9rem' }}>
-                    Match with {jobs.length} opportunities to continue.
-                </p>
             </div>
 
             {/* Smart Phone Frame */}
