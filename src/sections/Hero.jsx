@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { FiArrowRight, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
 import AnimatedCounter from '../components/AnimatedCounter';
+import InteractiveLogo from '../components/InteractiveLogo';
 
 export default function Hero() {
     return (
@@ -14,6 +15,7 @@ export default function Hero() {
                 overflow: 'hidden',
             }}
         >
+            <InteractiveLogo />
             {/* Gradient orbs */}
             <div style={{
                 position: 'absolute',
