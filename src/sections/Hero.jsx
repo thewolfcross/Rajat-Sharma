@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
 import { FiArrowRight, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
 import AnimatedCounter from '../components/AnimatedCounter';
+import BackgroundBatLogo from '../components/BackgroundBatLogo';
 
-export default function Hero() {
+export default function Hero({ darkMode }) {
     return (
         <section
             id="hero"
@@ -14,6 +15,8 @@ export default function Hero() {
                 overflow: 'hidden',
             }}
         >
+            {/* Background Bat Logo */}
+            <BackgroundBatLogo darkMode={darkMode} />
             {/* Gradient orbs */}
             <div style={{
                 position: 'absolute',
