@@ -21,10 +21,15 @@ export default function App() {
   const [appState, setAppState] = useState('selecting'); // 'selecting', 'game', 'loading', 'profile'
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
+  const [thanosMode, setThanosMode] = useState(false);
 
   useEffect(() => {
     document.body.classList.toggle('light-mode', !darkMode);
   }, [darkMode]);
+
+  const toggleThanos = () => {
+    setThanosMode(!thanosMode);
+  };
 
   const handleSelection = (choice) => {
     if (choice === 'game') {
@@ -69,15 +74,51 @@ export default function App() {
 
           <main style={{ position: 'relative', zIndex: 2 }}>
             <Hero darkMode={darkMode} />
-            <About />
+
+            <AnimatePresence>
+              {!thanosMode && (
+                <motion.div
+                  key="extra-content"
+                  initial={{ opacity: 1, filter: 'blur(0px)' }}
+                  exit={{
+                    opacity: 0,
+                    filter: 'blur(20px)',
+                    y: -20,
+                    transition: { duration: 1.5, ease: "easeOut" }
+                  }}
+                >
+                  <About />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <ImpactDashboard />
             <Experience />
-            <Skills />
-            <CaseStudies />
-            <GamingZone />
-            <Testimonials />
+
+            <AnimatePresence>
+              {!thanosMode && (
+                <motion.div
+                  key="extra-content-lower"
+                  initial={{ opacity: 1, filter: 'blur(0px)' }}
+                  exit={{
+                    opacity: 0,
+                    filter: 'blur(30px)',
+                    scale: 0.95,
+                    transition: { duration: 2, ease: "easeOut" }
+                  }}
+                >
+                  <Skills />
+                  <CaseStudies />
+                  <GamingZone />
+                  <Testimonials />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <Contact />
           </main>
+
+          <ThanosTrigger isActive={thanosMode} toggle={toggleThanos} />
         </div>
       )}
     </div>
