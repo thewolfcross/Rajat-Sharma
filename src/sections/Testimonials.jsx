@@ -27,7 +27,7 @@ const testimonials = [
     },
 ];
 
-export default function Testimonials() {
+export default function Testimonials({ darkMode }) {
     const [current, setCurrent] = useState(0);
 
     useEffect(() => {
@@ -102,7 +102,8 @@ export default function Testimonials() {
                             <p style={{
                                 fontSize: '1rem',
                                 lineHeight: 1.8,
-                                opacity: 0.7,
+                                opacity: darkMode ? 0.7 : 0.9,
+                                color: darkMode ? 'inherit' : '#1e293b',
                                 fontStyle: 'italic',
                                 maxWidth: 550,
                                 margin: '0 auto',
