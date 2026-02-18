@@ -19,23 +19,16 @@ export default function BatmanJobLoader({ onComplete }) {
         setSwipeDir(direction);
         setTimeout(() => {
             if (direction === 'right') setAccepted(prev => prev + 1);
-            if (currentIndex < jobs.length - 1) {
-                setCurrentIndex(prev => prev + 1);
-            } else {
-                // If we finished all 4, and let's say we need at least some accepted
-                if (accepted >= 1 || direction === 'right') {
-                    // Unlock
-                }
-            }
+            setCurrentIndex(prev => prev + 1);
             setSwipeDir(null);
         }, 300);
     };
 
     useEffect(() => {
-        if (accepted >= 4) {
-            setTimeout(onComplete, 800);
+        if (currentIndex === jobs.length) {
+            setTimeout(onComplete, 1500); // Give time to see "MISSIONS ACCEPTED"
         }
-    }, [accepted]);
+    }, [currentIndex, onComplete]);
 
     return (
         <motion.div
