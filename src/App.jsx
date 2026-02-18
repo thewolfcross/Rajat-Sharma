@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import InteractiveGalaxy from './components/InteractiveGalaxy';
-import CursorGlow from './components/CursorGlow';
 import ThanosTrigger from './components/ThanosTrigger';
 import Navbar from './components/Navbar';
 import Hero from './sections/Hero';
@@ -13,7 +12,7 @@ import CaseStudies from './sections/CaseStudies';
 import GamingZone from './sections/GamingZone';
 import Testimonials from './sections/Testimonials';
 import Contact from './sections/Contact';
-import BatmanJobLoader from './components/BatmanJobLoader';
+import PortfolioLoader from './components/PortfolioLoader';
 import SelectionGate from './components/SelectionGate';
 import MiniGame from './components/MiniGame';
 
@@ -66,18 +65,17 @@ export default function App() {
           <MiniGame key="mini-game" onComplete={handleGameComplete} />
         )}
         {appState === 'loading' && (
-          <BatmanJobLoader key="batman-loader" onComplete={handleLoadingComplete} />
+          <PortfolioLoader key="portfolio-loader" onComplete={handleLoadingComplete} />
         )}
       </AnimatePresence>
 
       {appState === 'profile' && (
         <>
           <InteractiveGalaxy darkMode={darkMode} />
-          <CursorGlow />
           <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
           <main className={`transition-all duration-1000 ${getModeClass()}`} style={{ position: 'relative', zIndex: 2 }}>
-            <div className="mode-transition thanos-visible"><Hero darkMode={darkMode} /></div>
+            <div className="mode-transition thanos-visible"><Hero /></div>
             <div className="mode-transition thanos-hidden"><About /></div>
             <div className="mode-transition thanos-visible"><ImpactDashboard /></div>
             <div className="mode-transition thanos-visible"><Experience /></div>

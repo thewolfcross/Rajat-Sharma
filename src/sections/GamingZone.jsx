@@ -11,11 +11,10 @@ import batmanIcon from '../assets/16277159-08f2-44c0-b3b7-39162de53f71.png'; // 
 // Game 2: RPS (Jetha vs Joker)
 // Game 3: Yahtzee (Jetha vs Joker)
 
-import jethaIcon from '../assets/16277159-08f2-44c0-b3b7-39162de53f71.png';
-import jokerIcon from '../assets/Joker-9.webp';
-import batIcon from '../assets/batman-68-269x300.webp';
+import robotIcon from '../assets/robot-icon.png'; // Placeholder for professional AI icon
+import userIcon from '../assets/user-icon.png';   // Placeholder for user icon
 
-// --- TIC TAC TOE (Preserved) ---
+// --- TIC TAC TOE (Strategic Arena) ---
 const TicTacToeGame = () => {
     const [board, setBoard] = useState(Array(9).fill(null));
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
@@ -36,7 +35,7 @@ const TicTacToeGame = () => {
                 if (available.length > 0) {
                     const move = available[Math.floor(Math.random() * available.length)];
                     const newBoard = [...board];
-                    newBoard[move] = 'joker';
+                    newBoard[move] = 'ai';
                     setBoard(newBoard);
                     checkWinner(newBoard);
                     setIsPlayerTurn(true);
@@ -56,7 +55,7 @@ const TicTacToeGame = () => {
     const handleClick = (i) => {
         if (board[i] || !isPlayerTurn || winner) return;
         const newBoard = [...board];
-        newBoard[i] = 'batman';
+        newBoard[i] = 'player';
         setBoard(newBoard);
         checkWinner(newBoard);
         setIsPlayerTurn(false);
@@ -64,38 +63,38 @@ const TicTacToeGame = () => {
 
     return (
         <div className="flex flex-col items-center">
-            <h3 className="text-xl font-bold mb-4 text-[#ffd700]">Batman vs Joker</h3>
+            <h3 className="text-xl font-bold mb-4 text-[#00d4ff]">Strategic Arena (You vs AI)</h3>
             <div className="grid grid-cols-3 gap-2 p-3 bg-white/5 rounded-xl">
                 {board.map((c, i) => (
                     <button key={i} onClick={() => handleClick(i)} className="w-20 h-20 sm:w-24 sm:h-24 bg-white/5 rounded-lg text-2xl flex items-center justify-center overflow-hidden relative">
-                        {c === 'batman' && (
-                            <motion.img
-                                src={batIcon}
-                                alt="Batman"
-                                className="w-16 h-16 object-contain drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]"
+                        {c === 'player' && (
+                            <motion.div
+                                className="w-12 h-12 flex items-center justify-center text-[#00d4ff] font-bold border-2 border-[#00d4ff] rounded-lg"
                                 initial={{ scale: 0, rotate: -45 }}
                                 animate={{ scale: 1, rotate: 0 }}
-                            />
+                            >
+                                X
+                            </motion.div>
                         )}
-                        {c === 'joker' && (
-                            <motion.img
-                                src={jokerIcon}
-                                alt="Joker"
-                                className="w-16 h-16 object-contain drop-shadow-[0_0_10px_rgba(114,9,183,0.5)]"
+                        {c === 'ai' && (
+                            <motion.div
+                                className="w-12 h-12 flex items-center justify-center text-[#ffd700] font-bold border-2 border-[#ffd700] rounded-full"
                                 initial={{ scale: 0, rotate: 45 }}
                                 animate={{ scale: 1, rotate: 0 }}
-                            />
+                            >
+                                O
+                            </motion.div>
                         )}
                     </button>
                 ))}
             </div>
             <div className="mt-6 h-8 text-lg font-bold tracking-wider">
                 {winner ? (
-                    <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={winner === 'batman' ? 'text-[#ffd700]' : winner === 'joker' ? 'text-[#7209b7]' : 'text-gray-400'}>
-                        {winner === 'draw' ? 'STALEMATE' : `${winner === 'batman' ? 'BATMAN' : 'JOKER'} WINS!`}
+                    <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={winner === 'player' ? 'text-[#00d4ff]' : winner === 'ai' ? 'text-[#ffd700]' : 'text-gray-400'}>
+                        {winner === 'draw' ? 'STALEMATE' : `${winner === 'player' ? 'PLAYER' : 'AI'} WINS!`}
                     </motion.span>
                 ) : (
-                    <span className="text-gray-500 text-sm font-mono">{isPlayerTurn ? 'YOUR TURN' : 'OPPONENT THINKING...'}</span>
+                    <span className="text-gray-500 text-sm font-mono">{isPlayerTurn ? 'YOUR TURN' : 'AI IS ANALYZING...'}</span>
                 )}
             </div>
         </div>
