@@ -21,19 +21,10 @@ export default function App() {
   const [appState, setAppState] = useState('selecting'); // 'selecting', 'game', 'loading', 'profile'
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
-  const [thanosMode, setThanosMode] = useState(false);
 
   useEffect(() => {
     document.body.classList.toggle('light-mode', !darkMode);
   }, [darkMode]);
-
-  const toggleThanos = () => {
-    setThanosMode(!thanosMode);
-  };
-
-  const getModeClass = () => {
-    return thanosMode ? 'thanos-active' : '';
-  };
 
   const handleSelection = (choice) => {
     if (choice === 'game') {
@@ -72,24 +63,22 @@ export default function App() {
       </AnimatePresence>
 
       {appState === 'profile' && (
-        <>
+        <div className="relative">
           <InteractiveGalaxy darkMode={darkMode} />
           <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
-          <main className={`transition-all duration-1000 ${getModeClass()}`} style={{ position: 'relative', zIndex: 2 }}>
-            <div className="mode-transition thanos-visible"><Hero darkMode={darkMode} /></div>
-            <div className="mode-transition thanos-hidden"><About /></div>
-            <div className="mode-transition thanos-visible"><ImpactDashboard /></div>
-            <div className="mode-transition thanos-visible"><Experience /></div>
-            <div className="mode-transition thanos-hidden"><Skills /></div>
-            <div className="mode-transition thanos-hidden"><CaseStudies /></div>
-            <div className="mode-transition thanos-hidden"><GamingZone /></div>
-            <div className="mode-transition thanos-hidden"><Testimonials /></div>
-            <div className="mode-transition thanos-visible"><Contact /></div>
+          <main style={{ position: 'relative', zIndex: 2 }}>
+            <Hero darkMode={darkMode} />
+            <About />
+            <ImpactDashboard />
+            <Experience />
+            <Skills />
+            <CaseStudies />
+            <GamingZone />
+            <Testimonials />
+            <Contact />
           </main>
-
-          <ThanosTrigger isActive={thanosMode} toggle={toggleThanos} />
-        </>
+        </div>
       )}
     </div>
   );
