@@ -1,4 +1,4 @@
-import React from 'react';
+import InteractiveLandingBackground from './InteractiveLandingBackground';
 import { motion } from 'framer-motion';
 
 const SelectionGate = ({ onPlayGame, onGoToProfile }) => {
@@ -7,13 +7,9 @@ const SelectionGate = ({ onPlayGame, onGoToProfile }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[#050505] overflow-hidden p-6"
+            className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[#020205] overflow-hidden p-6"
         >
-            {/* Dynamic Background */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
-            </div>
+            <InteractiveLandingBackground />
 
             <motion.div
                 initial={{ y: 20, opacity: 0 }}
