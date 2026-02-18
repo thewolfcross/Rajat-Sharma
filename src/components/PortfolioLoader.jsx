@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiCheck, FiX, FiBriefcase, FiMapPin, FiAward } from 'react-icons/fi';
 
 const jobs = [
-    { id: 1, title: "Marketing Strategist", company: "Wayne Enterprises", location: "Gotham City", salary: "₹85 Cr+ Impact", icon: <FiBriefcase /> },
+    { id: 1, title: "Marketing Strategist", company: "NextGen Media", location: "Singapore / Remote", salary: "₹85 Cr+ Impact", icon: <FiBriefcase /> },
     { id: 2, title: "Growth Director", company: "Gada Electronics", location: "Mumbai / Hybrid", salary: "Top Tier", icon: <FiAward /> },
-    { id: 3, title: "Operations Head", company: "Arkham Solutions", location: "Remote", salary: "High Fidelity", icon: <FiMapPin /> },
-    { id: 4, title: "Revenue Engine Lead", company: "Steletoulogo Corp", location: "Global / LATAM", salary: "Strategic", icon: <FiAward /> },
+    { id: 3, title: "Operations Head", company: "TechNova Solutions", location: "Global / Fully Remote", salary: "High Fidelity", icon: <FiMapPin /> },
+    { id: 4, title: "Revenue Engine Lead", company: "Global Growth Corp", location: "Global / LATAM", salary: "Strategic", icon: <FiAward /> },
 ];
 
 export default function PortfolioLoader({ onComplete }) {

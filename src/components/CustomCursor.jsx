@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, useSpring, useMotionValue, useTransform } from 'framer-motion';
-import logoImg from '../assets/hero-logo.png';
 
 export default function CustomCursor({ darkMode }) {
     const [isHovered, setIsHovered] = useState(false);
@@ -66,40 +65,55 @@ export default function CustomCursor({ darkMode }) {
         >
             <motion.div
                 animate={{
-                    scale: isHovered ? 1.5 : 1,
-                    rotate: rotation,
+                    scale: isHovered ? 2.5 : 1,
                 }}
                 transition={{
                     type: "spring",
                     stiffness: 300,
                     damping: 20
                 }}
-                className="relative"
+                className="relative flex items-center justify-center"
             >
-                <img
-                    src={logoImg}
-                    alt="Custom Cursor"
+                {/* Main Cursor Core */}
+                <div
                     style={{
-                        width: '32px',
-                        height: '32px',
-                        filter: darkMode
-                            ? `drop-shadow(0 0 8px rgba(0, 212, 255, 0.6)) invert(1) brightness(1.2)`
-                            : `drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))`,
-                        objectFit: 'contain'
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        background: darkMode ? '#00d4ff' : '#00a3ff',
+                        boxShadow: `0 0 15px ${darkMode ? 'rgba(0, 212, 255, 0.8)' : 'rgba(0, 163, 255, 0.6)'}`,
                     }}
                 />
 
-                {/* Trail Glow */}
+                {/* Professional Outer Halo */}
+                <motion.div
+                    initial={false}
+                    animate={{
+                        width: isHovered ? 40 : 24,
+                        height: isHovered ? 40 : 24,
+                        opacity: isHovered ? 0.6 : 0.2,
+                        borderColor: isHovered ? 'var(--color-primary)' : 'rgba(255,255,255,0.2)'
+                    }}
+                    style={{
+                        position: 'absolute',
+                        borderRadius: '50%',
+                        border: '1.5px solid',
+                        transition: 'all 0.3s ease'
+                    }}
+                />
+
+                {/* Trail Glow (Subtle pulse) */}
                 <motion.div
                     className="absolute inset-0 rounded-full"
                     animate={{
-                        opacity: isHovered ? [0.2, 0.5, 0.2] : 0,
+                        opacity: isHovered ? [0.1, 0.3, 0.1] : 0,
                     }}
-                    transition={{ repeat: Infinity, duration: 1.5 }}
+                    transition={{ repeat: Infinity, duration: 2 }}
                     style={{
-                        background: 'radial-gradient(circle, rgba(0,212,255,0.4) 0%, transparent 70%)',
-                        filter: 'blur(8px)',
-                        transform: 'scale(2)'
+                        background: 'radial-gradient(circle, rgba(0,212,255,0.3) 0%, transparent 70%)',
+                        filter: 'blur(10px)',
+                        transform: 'scale(4)',
+                        zIndex: -1
                     }}
                 />
             </motion.div>
