@@ -2,7 +2,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useEffect } from 'react';
 import logoImg from '../assets/hero-logo.png';
 
-export default function InteractiveLogo() {
+export default function InteractiveLogo({ darkMode }) {
     const x = useMotionValue(0);
     const y = useMotionValue(0);
 
@@ -33,14 +33,14 @@ export default function InteractiveLogo() {
             alignItems: 'center',
             justifyContent: 'center',
             pointerEvents: 'none',
-            zIndex: 0,
+            zIndex: 1, // Above galaxy (-1)
             overflow: 'hidden'
         }}>
             <motion.div
                 style={{
                     perspective: 1000,
-                    width: 'clamp(300px, 50vw, 600px)',
-                    opacity: 0.15, // Subtle for professional background
+                    width: 'clamp(350px, 60vw, 700px)',
+                    opacity: darkMode ? 0.25 : 0.1, // Adjusted for visibility
                 }}
             >
                 <motion.img
@@ -51,7 +51,7 @@ export default function InteractiveLogo() {
                         height: 'auto',
                         rotateX,
                         rotateY,
-                        filter: 'drop-shadow(0 0 30px rgba(0, 212, 255, 0.2)) grayscale(20%)',
+                        filter: `drop-shadow(0 0 40px ${darkMode ? 'rgba(0, 212, 255, 0.4)' : 'rgba(0, 0, 0, 0.1)'}) ${darkMode ? 'invert(1) brightness(0.8)' : 'none'}`,
                     }}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}

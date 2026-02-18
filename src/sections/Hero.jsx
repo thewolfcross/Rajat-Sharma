@@ -3,7 +3,7 @@ import { FiArrowRight, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
 import AnimatedCounter from '../components/AnimatedCounter';
 import InteractiveLogo from '../components/InteractiveLogo';
 
-export default function Hero() {
+export default function Hero({ darkMode }) {
     return (
         <section
             id="hero"
@@ -15,7 +15,7 @@ export default function Hero() {
                 overflow: 'hidden',
             }}
         >
-            <InteractiveLogo />
+            <InteractiveLogo darkMode={darkMode} />
             {/* Gradient orbs */}
             <div style={{
                 position: 'absolute',

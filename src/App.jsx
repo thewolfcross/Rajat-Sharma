@@ -75,7 +75,7 @@ export default function App() {
           <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
           <main className={`transition-all duration-1000 ${getModeClass()}`} style={{ position: 'relative', zIndex: 2 }}>
-            <div className="mode-transition thanos-visible"><Hero /></div>
+            <div className="mode-transition thanos-visible"><Hero darkMode={darkMode} /></div>
             <div className="mode-transition thanos-hidden"><About /></div>
             <div className="mode-transition thanos-visible"><ImpactDashboard /></div>
             <div className="mode-transition thanos-visible"><Experience /></div>
