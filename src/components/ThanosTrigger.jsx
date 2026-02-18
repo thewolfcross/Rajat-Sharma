@@ -8,6 +8,12 @@ export default function ThanosTrigger({ isActive, toggle }) {
     const handleClick = () => {
         if (!isActive) {
             setIsSnapping(true);
+
+            // Play snap sound
+            const audio = new Audio('https://www.soundjay.com/communication/sounds/finger-snap-1.mp3');
+            audio.volume = 0.5;
+            audio.play().catch(e => console.log("Audio play failed:", e));
+
             setTimeout(() => {
                 setIsSnapping(false);
                 toggle();
