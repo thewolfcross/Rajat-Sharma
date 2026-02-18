@@ -8,204 +8,203 @@ export default function InteractiveGalaxy({ darkMode }) {
         const ctx = canvas.getContext('2d');
         let animationId;
         let particles = [];
-        let mouse = { x: null, y: null, radius: 150 };
+        let flowField = [];
+        let mouse = { x: -1000, y: -1000, radius: 250, strength: 0 };
+        const cellSize = 50;
+        let rows, cols;
 
         const resize = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            cols = Math.ceil(canvas.width / cellSize) + 1;
+            rows = Math.ceil(canvas.height / cellSize) + 1;
+            initFlowField();
             initParticles();
         };
 
+        const initFlowField = () => {
+            flowField = [];
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    const angle = (Math.cos(x * 0.1) + Math.sin(y * 0.1)) * Math.PI * 2;
+                    flowField.push(angle);
+                }
+            }
+        };
+
         class Particle {
-            constructor(x, y, color) {
-                this.x = Math.random() * canvas.width; // Start random
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.targetX = x; // The "Wolf" position
-                this.targetY = y;
-                this.radius = Math.random() * 2 + 1;
-                this.color = color;
-                this.density = (Math.random() * 30) + 1;
+                this.vx = 0;
+                this.vy = 0;
+                this.accX = 0;
+                this.accY = 0;
+                this.speed = Math.random() * 0.5 + 0.2;
+                this.history = [];
+                this.maxLength = Math.floor(Math.random() * 10 + 5);
+                this.angle = 0;
+                this.color = darkMode
+                    ? `hsla(${200 + Math.random() * 40}, 100%, 60%, ${Math.random() * 0.4 + 0.1})`
+                    : `hsla(${20 + Math.random() * 40}, 80%, 50%, ${Math.random() * 0.3 + 0.1})`;
+            }
+
+            update() {
+                const xIdx = Math.floor(this.x / cellSize);
+                const yIdx = Math.floor(this.y / cellSize);
+                const idx = yIdx * cols + xIdx;
+
+                if (flowField[idx]) {
+                    this.angle = flowField[idx];
+                }
+
+                // Mouse interaction
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < mouse.radius) {
+                    const force = (mouse.radius - dist) / mouse.radius;
+                    const angle = Math.atan2(dy, dx);
+
+                    if (mouse.strength > 0) {
+                        // Gravity pull on click
+                        this.accX += Math.cos(angle) * force * 5;
+                        this.accY += Math.sin(angle) * force * 5;
+                    } else {
+                        // Gentle flow follow
+                        this.accX += Math.cos(this.angle + force * 2) * this.speed;
+                        this.accY += Math.sin(this.angle + force * 2) * this.speed;
+                    }
+                } else {
+                    this.accX += Math.cos(this.angle) * this.speed * 0.5;
+                    this.accY += Math.sin(this.angle) * this.speed * 0.5;
+                }
+
+                this.vx += this.accX;
+                this.vy += this.accY;
+
+                // Friction
+                this.vx *= 0.96;
+                this.vy *= 0.96;
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                this.accX = 0;
+                this.accY = 0;
+
+                // Boundary check
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+
+                // Tail history
+                this.history.push({ x: this.x, y: this.y });
+                if (this.history.length > this.maxLength) this.history.shift();
             }
 
             draw() {
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.closePath();
-                ctx.fillStyle = this.color;
-                ctx.fill();
-            }
-
-            update() {
-                // Interactive breathing (slower in light mode maybe? Keeping same)
-                const time = Date.now() * 0.001;
-                const breathScale = 1 + Math.sin(time) * 0.02;
-                const cx = canvas.width / 2;
-                const cy = canvas.height / 2;
-
-                // Calculate actual target with breathing
-                let tx = ((this.targetX - cx) * breathScale) + cx;
-                let ty = ((this.targetY - cy) * breathScale) + cy;
-
-                // Mouse Interaction
-                if (mouse.x) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < mouse.radius) {
-                        const forceDirectionX = dx / distance;
-                        const forceDirectionY = dy / distance;
-                        const maxDistance = mouse.radius;
-                        const force = (maxDistance - distance) / maxDistance;
-                        const directionX = forceDirectionX * force * this.density * 5; // Strong repulsion
-                        const directionY = forceDirectionY * force * this.density * 5;
-
-                        this.x -= directionX;
-                        this.y -= directionY;
-                    } else {
-                        // Return to Target (Elastic)
-                        if (this.x !== tx) {
-                            let dx = this.x - tx;
-                            this.x -= dx / 10;
-                        }
-                        if (this.y !== ty) {
-                            let dy = this.y - ty;
-                            this.y -= dy / 10;
-                        }
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 1.5;
+                if (this.history.length > 0) {
+                    ctx.moveTo(this.history[0].x, this.history[0].y);
+                    for (let i = 1; i < this.history.length; i++) {
+                        ctx.lineTo(this.history[i].x, this.history[i].y);
                     }
-                } else {
-                    // Return to Target (Idle)
-                    if (this.x !== tx) {
-                        let dx = this.x - tx;
-                        this.x -= dx / 15; // Slower snap back
-                    }
-                    if (this.y !== ty) {
-                        let dy = this.y - ty;
-                        this.y -= dy / 15;
-                    }
+                    ctx.stroke();
                 }
-                this.draw();
             }
         }
-
-        const isInsideWolf = (x, y, cx, cy, scale) => {
-            // Normalized coordinates relative to center
-            const nx = (x - cx) / scale;
-            const ny = (y - cy) / scale;
-
-            // Simple Wolf Head approximation using combined shapes
-            // 1. Snout (Triangle pointing down)
-            if (ny > 0 && ny < 0.6 && Math.abs(nx) < (0.3 - ny * 0.4)) return true;
-            // 2. Forehead (Rectangle-ish)
-            if (ny > -0.5 && ny <= 0 && Math.abs(nx) < 0.4) return true;
-            // 3. Ears (Triangles)
-            // Left Ear
-            if (nx < -0.2 && nx > -0.6 && ny < -0.3 && ny > -0.9 - (nx + 0.4)) return true;
-            // Right Ear
-            if (nx > 0.2 && nx < 0.6 && ny < -0.3 && ny > -0.9 + (nx - 0.4)) return true;
-            // 4. Cheeks (Side fluff)
-            if (ny > 0 && ny < 0.4 && Math.abs(nx) < 0.5 && Math.abs(nx) > 0.2) return true;
-
-            return false;
-        };
 
         const initParticles = () => {
             particles = [];
-            const cx = canvas.width / 2;
-            const cy = canvas.height / 2;
-            // Scale based on screen size (responsive)
-            const scale = Math.min(canvas.width, canvas.height) * 0.5;
-
-            // Generate particles inside the Wolf shape
-            const particleCount = canvas.width < 768 ? 200 : 400; // Efficient count
-
-            let attempts = 0;
-            while (particles.length < particleCount && attempts < 20000) {
-                const x = (Math.random() - 0.5) * scale * 1.5 + cx;
-                const y = (Math.random() - 0.5) * scale * 1.5 + cy;
-
-                if (isInsideWolf(x, y, cx, cy, scale / 1.2)) {
-                    let color;
-                    if (darkMode) {
-                        const colors = ['#00d4ff', '#ff9f43', '#ffffff']; // Cyber
-                        color = colors[Math.floor(Math.random() * colors.length)];
-                    } else {
-                        const colors = ['#1a1a1a', '#333333', '#00d4ff']; // Dark/Grey/Cyan
-                        color = colors[Math.floor(Math.random() * colors.length)];
-                    }
-                    particles.push(new Particle(x, y, color));
-                }
-                attempts++;
+            const count = Math.min(window.innerWidth / 4, 300);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
             }
+        };
+
+        const drawBackground = () => {
+            const time = Date.now() * 0.0005;
+            const grad = ctx.createRadialGradient(
+                canvas.width / 2 + Math.cos(time) * 100,
+                canvas.height / 2 + Math.sin(time) * 100,
+                0,
+                canvas.width / 2,
+                canvas.height / 2,
+                canvas.width
+            );
+
+            if (darkMode) {
+                grad.addColorStop(0, '#0a0a15');
+                grad.addColorStop(0.5, '#050505');
+                grad.addColorStop(1, '#020205');
+            } else {
+                grad.addColorStop(0, '#f8faff');
+                grad.addColorStop(0.5, '#ffffff');
+                grad.addColorStop(1, '#f0f4f8');
+            }
+
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Subtle Mesh Blobs
+            ctx.filter = 'blur(100px)';
+            ctx.globalAlpha = darkMode ? 0.08 : 0.04;
+
+            const bX = canvas.width / 2 + Math.sin(time * 0.7) * 200;
+            const bY = canvas.height / 2 + Math.cos(time * 0.8) * 200;
+
+            ctx.fillStyle = darkMode ? '#00d4ff' : '#3b82f6';
+            ctx.beginPath();
+            ctx.arc(bX, bY, 300, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = darkMode ? '#ffd700' : '#fb923c';
+            ctx.beginPath();
+            ctx.arc(canvas.width - bX, canvas.height - bY, 250, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.filter = 'none';
+            ctx.globalAlpha = 1;
         };
 
         const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBackground();
 
-            // Dynamic Background
-            ctx.fillStyle = darkMode ? '#050505' : '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
 
-            // Connect particles (The "Geometrical" part)
-            connect();
-
-            particles.forEach(p => p.update());
             animationId = requestAnimationFrame(animate);
         };
 
-        const connect = () => {
-            for (let a = 0; a < particles.length; a++) {
-                for (let b = a; b < particles.length; b++) {
-                    const dx = particles[a].x - particles[b].x;
-                    const dy = particles[a].y - particles[b].y;
-                    const distance = dx * dx + dy * dy;
-
-                    // Dynamic connection distance
-                    if (distance < 5000) {
-                        const opacity = 1 - (distance / 5000);
-                        // Dynamic Line Color
-                        const stroke = darkMode
-                            ? `rgba(0, 212, 255, ${opacity * 0.25})` // Cyan in Dark
-                            : `rgba(0, 0, 0, ${opacity * 0.15})`;   // Black in Light
-
-                        ctx.strokeStyle = stroke;
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[a].x, particles[a].y);
-                        ctx.lineTo(particles[b].x, particles[b].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        };
-
         const onMouseMove = (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
         };
 
-        const onTouchMove = (e) => {
-            if (e.touches.length > 0) {
-                mouse.x = e.touches[0].clientX;
-                mouse.y = e.touches[0].clientY;
-            }
+        const onMouseDown = () => {
+            mouse.strength = 1;
+            mouse.radius = 400;
         };
 
-        const onClick = () => {
-            mouse.radius = 500; // Huge shockwave
-            setTimeout(() => mouse.radius = 150, 400);
+        const onMouseUp = () => {
+            mouse.strength = 0;
+            mouse.radius = 250;
         };
-
-        const onLeave = () => {
-            mouse.x = null;
-            mouse.y = null;
-        }
 
         window.addEventListener('resize', resize);
         window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('touchmove', onTouchMove);
-        window.addEventListener('click', onClick);
-        window.addEventListener('mouseout', onLeave);
+        window.addEventListener('mousedown', onMouseDown);
+        window.addEventListener('mouseup', onMouseUp);
 
         resize();
         animate();
@@ -214,11 +213,10 @@ export default function InteractiveGalaxy({ darkMode }) {
             cancelAnimationFrame(animationId);
             window.removeEventListener('resize', resize);
             window.removeEventListener('mousemove', onMouseMove);
-            window.removeEventListener('touchmove', onTouchMove);
-            window.removeEventListener('click', onClick);
-            window.removeEventListener('mouseout', onLeave);
+            window.removeEventListener('mousedown', onMouseDown);
+            window.removeEventListener('mouseup', onMouseUp);
         };
-    }, [darkMode]); // Re-run when darkMode changes
+    }, [darkMode]);
 
     return (
         <canvas
@@ -228,7 +226,7 @@ export default function InteractiveGalaxy({ darkMode }) {
                 inset: 0,
                 zIndex: -1,
                 background: darkMode ? '#050505' : '#ffffff',
-                transition: 'background 0.5s ease'
+                pointerEvents: 'auto', // Enable pointer events for interaction
             }}
         />
     );
