@@ -39,13 +39,13 @@ export default function ThanosTrigger({ isActive, toggle }) {
                         <motion.img
                             src={snapVibe}
                             alt="Snap Vibe"
-                            className="w-[80vw] h-auto object-contain opacity-40 grayscale contrast-125"
+                            className="w-[85vw] h-auto object-contain grayscale contrast-125 mix-blend-screen opacity-10"
                             animate={{
                                 scale: [1, 1.05, 1],
-                                opacity: [0.3, 0.5, 0.3],
+                                opacity: [0.1, 0.2, 0.1],
                             }}
                             transition={{
-                                duration: 8,
+                                duration: 10,
                                 repeat: Infinity,
                                 ease: "easeInOut"
                             }}
@@ -76,12 +76,12 @@ export default function ThanosTrigger({ isActive, toggle }) {
 
                 <motion.button
                     onClick={handleClick}
-                    className="relative group w-24 h-24 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 flex items-center justify-center overflow-hidden shadow-2xl"
-                    whileHover={{ scale: 1.1, borderColor: '#ffd700' }}
+                    className="relative group w-24 h-24 rounded-full bg-white/5 backdrop-blur-md border border-white/5 flex items-center justify-center overflow-hidden transition-all duration-500 shadow-xl"
+                    whileHover={{ scale: 1.1, borderColor: '#ffd700', backgroundColor: 'rgba(255, 215, 0, 0.05)' }}
                     whileTap={{ scale: 0.9 }}
                     animate={{
-                        borderColor: isActive ? '#ffd700' : 'rgba(255,255,255,0.1)',
-                        boxShadow: isActive ? '0 0 35px rgba(255, 215, 0, 0.4)' : 'none'
+                        borderColor: isActive ? '#ffd700' : 'rgba(255,255,255,0.05)',
+                        boxShadow: isActive ? '0 0 30px rgba(255, 215, 0, 0.2)' : 'none'
                     }}
                 >
                     <motion.img
@@ -91,14 +91,14 @@ export default function ThanosTrigger({ isActive, toggle }) {
                             scale: [1, 1.3, 0.8, 1],
                             rotate: [0, 20, -20, 0],
                         } : {
-                            scale: isActive ? 1.1 : 1,
+                            scale: isActive ? 1.15 : 1,
                             rotate: 0
                         }}
-                        className="w-18 h-18 object-contain brightness-125"
+                        className="w-18 h-18 object-contain brightness-110 mix-blend-screen opacity-60 group-hover:opacity-100 transition-opacity"
                     />
 
                     {/* Glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-[#ffd700]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-[#ffd700]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </motion.button>
 
                 <motion.span
