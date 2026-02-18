@@ -3,7 +3,6 @@ import { AnimatePresence } from 'framer-motion';
 import InteractiveGalaxy from './components/InteractiveGalaxy';
 import CursorGlow from './components/CursorGlow';
 import ThanosTrigger from './components/ThanosTrigger';
-import JethaTrigger from './components/JethaTrigger';
 import Navbar from './components/Navbar';
 import Hero from './sections/Hero';
 import About from './sections/About';
@@ -23,7 +22,6 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
   const [thanosMode, setThanosMode] = useState(false);
-  const [jethaMode, setJethaMode] = useState(false);
 
   useEffect(() => {
     document.body.classList.toggle('light-mode', !darkMode);
@@ -31,18 +29,10 @@ export default function App() {
 
   const toggleThanos = () => {
     setThanosMode(!thanosMode);
-    if (jethaMode) setJethaMode(false);
-  };
-
-  const toggleJetha = () => {
-    setJethaMode(!jethaMode);
-    if (thanosMode) setThanosMode(false);
   };
 
   const getModeClass = () => {
-    if (thanosMode) return 'thanos-active';
-    if (jethaMode) return 'jetha-active';
-    return '';
+    return thanosMode ? 'thanos-active' : '';
   };
 
   const handleSelection = (choice) => {
@@ -87,19 +77,18 @@ export default function App() {
           <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
           <main className={`transition-all duration-1000 ${getModeClass()}`} style={{ position: 'relative', zIndex: 2 }}>
-            <div className="mode-transition thanos-visible jetha-visible"><Hero /></div>
-            <div className="mode-transition thanos-hidden jetha-hidden"><About /></div>
-            <div className="mode-transition thanos-visible jetha-visible"><ImpactDashboard /></div>
-            <div className="mode-transition thanos-visible jetha-hidden"><Experience /></div>
-            <div className="mode-transition thanos-hidden jetha-hidden"><Skills /></div>
-            <div className="mode-transition thanos-hidden jetha-hidden"><CaseStudies /></div>
-            <div className="mode-transition thanos-hidden jetha-visible"><GamingZone /></div>
-            <div className="mode-transition thanos-hidden jetha-hidden"><Testimonials /></div>
-            <div className="mode-transition thanos-visible jetha-hidden"><Contact /></div>
+            <div className="mode-transition thanos-visible"><Hero /></div>
+            <div className="mode-transition thanos-hidden"><About /></div>
+            <div className="mode-transition thanos-visible"><ImpactDashboard /></div>
+            <div className="mode-transition thanos-visible"><Experience /></div>
+            <div className="mode-transition thanos-hidden"><Skills /></div>
+            <div className="mode-transition thanos-hidden"><CaseStudies /></div>
+            <div className="mode-transition thanos-hidden"><GamingZone /></div>
+            <div className="mode-transition thanos-hidden"><Testimonials /></div>
+            <div className="mode-transition thanos-visible"><Contact /></div>
           </main>
 
           <ThanosTrigger isActive={thanosMode} toggle={toggleThanos} />
-          <JethaTrigger isActive={jethaMode} toggle={toggleJetha} />
         </>
       )}
     </>

@@ -365,7 +365,7 @@ body.light-mode .timeline-dot {
   }
 }
 
-/* ===== Focus Modes (Thanos & Jetha) ===== */
+/* ===== Focus Mode (Thanos) ===== */
 .mode-transition {
   transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -382,20 +382,4 @@ body.light-mode .timeline-dot {
   transform: scale(1.02);
   z-index: 10;
   filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.2));
-}
-
-/* Jetha Mode */
-.jetha-active .jetha-hidden {
-  opacity: 0.1;
-  filter: blur(4px) sepia(50%);
-  pointer-events: none;
-  transform: translateY(20px);
-}
-
-.jetha-active .jetha-visible {
-  transform: scale(1.05);
-  z-index: 10;
-  filter: drop-shadow(0 0 25px rgba(255, 159, 67, 0.3));
-  border: 1px solid rgba(255, 159, 67, 0.3);
-  border-radius: 20px;
 }
