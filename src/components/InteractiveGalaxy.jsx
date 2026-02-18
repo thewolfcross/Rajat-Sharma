@@ -147,31 +147,31 @@ export default function InteractiveGalaxy({ darkMode }) {
 
             if (darkMode) {
                 // Top Left: Deep Indigo
-                ctx.globalAlpha = 0.15;
+                ctx.globalAlpha = 0.25;
                 ctx.fillStyle = '#1e1b4b';
                 ctx.beginPath();
-                ctx.arc(Math.sin(time) * 200 + 200, Math.cos(time * 0.8) * 200 + 200, 500, 0, Math.PI * 2);
+                ctx.arc(Math.sin(time) * 300 + 200, Math.cos(time * 0.8) * 300 + 200, 600, 0, Math.PI * 2);
                 ctx.fill();
 
                 // Bottom Right: Slate Blue
-                ctx.globalAlpha = 0.1;
-                ctx.fillStyle = '#0f172a';
+                ctx.globalAlpha = 0.2;
+                ctx.fillStyle = '#1e293b';
                 ctx.beginPath();
-                ctx.arc(canvas.width - 200, canvas.height - 200, 600, 0, Math.PI * 2);
+                ctx.arc(canvas.width - 100, canvas.height - 100, 700, 0, Math.PI * 2);
                 ctx.fill();
             } else {
                 // Top Right: Soft Mist Blue
-                ctx.globalAlpha = 0.05;
+                ctx.globalAlpha = 0.1;
                 ctx.fillStyle = '#cbd5e1';
                 ctx.beginPath();
-                ctx.arc(canvas.width - 200, 200, 500, 0, Math.PI * 2);
+                ctx.arc(canvas.width - 100, 100, 600, 0, Math.PI * 2);
                 ctx.fill();
 
                 // Bottom Left: Very Soft Pearl
-                ctx.globalAlpha = 0.04;
+                ctx.globalAlpha = 0.08;
                 ctx.fillStyle = '#e2e8f0';
                 ctx.beginPath();
-                ctx.arc(200, canvas.height - 200, 400, 0, Math.PI * 2);
+                ctx.arc(100, canvas.height - 100, 500, 0, Math.PI * 2);
                 ctx.fill();
             }
 
@@ -228,9 +228,9 @@ export default function InteractiveGalaxy({ darkMode }) {
             style={{
                 position: 'fixed',
                 inset: 0,
-                zIndex: -1,
+                zIndex: 0,
                 background: darkMode ? '#020205' : '#fcfcff',
-                pointerEvents: 'auto',
+                pointerEvents: 'none',
             }}
         />
     );

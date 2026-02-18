@@ -44,20 +44,19 @@
 html {
   scroll-behavior: smooth;
   font-family: var(--font-body);
-  background: var(--color-dark-bg);
-  /* Fallback background */
+  background: #020205;
+  /* Deep fallback matching galaxy */
 }
 
 body {
-  background: transparent;
-  /* Transparent to show GothamRain canvas */
+  background: transparent !important;
   color: var(--color-dark-text);
   overflow-x: hidden;
-  transition: background 0.4s ease, color 0.4s ease;
+  transition: color 0.4s ease;
 }
 
 body.light-mode {
-  background: var(--color-light-bg);
+  background: transparent !important;
   color: var(--color-light-text);
 }
 
