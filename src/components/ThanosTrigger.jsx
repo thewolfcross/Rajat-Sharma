@@ -8,19 +8,36 @@ export default function ThanosTrigger({ isActive, toggle }) {
     const handleClick = () => {
         if (!isActive) {
             setIsSnapping(true);
-            // Snap sound effect could go here
             setTimeout(() => {
                 setIsSnapping(false);
                 toggle();
-            }, 1000); // Wait for snap animation
+            }, 800);
         } else {
-            // Restore immediately
             toggle();
         }
     };
 
     return (
         <div className="fixed bottom-6 left-6 z-50 flex flex-col items-center">
+            {/* Snap White Flash Overlay */}
+            <AnimatePresence>
+                {isSnapping && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: [0, 1, 0] }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.6, times: [0, 0.2, 1] }}
+                        style={{
+                            position: 'fixed',
+                            inset: 0,
+                            backgroundColor: 'white',
+                            zIndex: 100000,
+                            pointerEvents: 'none'
+                        }}
+                    />
+                )}
+            </AnimatePresence>
+
             <motion.button
                 onClick={handleClick}
                 className="relative group w-16 h-16 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center overflow-hidden"
@@ -31,30 +48,22 @@ export default function ThanosTrigger({ isActive, toggle }) {
                     boxShadow: isActive ? '0 0 20px rgba(255, 215, 0, 0.4)' : 'none'
                 }}
             >
-                <AnimatePresence mode="wait">
-                    {!isSnapping ? (
-                        <motion.img
-                            key="gauntlet"
-                            src={thanosIcon}
-                            alt="Thanos Mode"
-                            className="w-10 h-10 object-contain"
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 1.5, opacity: 0, rotate: 20 }}
-                            transition={{ duration: 0.3 }}
-                        />
-                    ) : (
-                        <motion.div
-                            key="snap"
-                            className="w-full h-full bg-white flex items-center justify-center"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: [0, 1, 0], scale: [1, 1.5, 1] }}
-                            transition={{ duration: 0.8 }}
-                        >
-                            {/* Snap Flash */}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                <motion.img
+                    src={thanosIcon}
+                    alt="Thanos Mode"
+                    className="w-10 h-10 object-contain"
+                    animate={isSnapping ? {
+                        scale: [1, 1.4, 0.8, 1],
+                        rotate: [0, 15, -15, 0],
+                    } : {
+                        scale: 1,
+                        rotate: 0
+                    }}
+                    transition={{
+                        duration: 0.5,
+                        ease: "easeInOut"
+                    }}
+                />
             </motion.button>
             <motion.span
                 className="mt-2 text-[10px] uppercase font-bold tracking-widest text-[#ffd700]"
