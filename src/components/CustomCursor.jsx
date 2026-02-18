@@ -1,36 +1,25 @@
 import { useEffect, useState, useRef } from 'react';
-import { motion, useSpring, useMotionValue, useTransform } from 'framer-motion';
+import { motion, useSpring, useMotionValue, AnimatePresence } from 'framer-motion';
+import cursorLogo from '../assets/cursor-logo.png';
 
 export default function CustomCursor({ darkMode }) {
     const [isHovered, setIsHovered] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
     const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
 
-    const springConfig = { stiffness: 250, damping: 25, mass: 0.5 };
+    const springConfig = { stiffness: 400, damping: 35, mass: 0.5 };
     const springX = useSpring(cursorX, springConfig);
     const springY = useSpring(cursorY, springConfig);
 
-    const [rotation, setRotation] = useState(0);
-    const lastPos = useRef({ x: 0, y: 0 });
-
     useEffect(() => {
         const moveMouse = (e) => {
-            const { clientX, clientY } = e;
-            cursorX.set(clientX);
-            cursorY.set(clientY);
-
-            // Calculate rotation based on velocity
-            const deltaX = clientX - lastPos.current.x;
-            const deltaY = clientY - lastPos.current.y;
-            const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-
-            // Only update rotation if moving significantly to avoid flickering
-            if (Math.abs(deltaX) > 1 || Math.abs(deltaY) > 1) {
-                setRotation(angle);
-            }
-
-            lastPos.current = { x: clientX, y: clientY };
+            cursorX.set(e.clientX);
+            cursorY.set(e.clientY);
         };
+
+        const handleMouseDown = () => setIsClicked(true);
+        const handleMouseUp = () => setIsClicked(false);
 
         const handleHover = (e) => {
             const target = e.target;
@@ -45,10 +34,14 @@ export default function CustomCursor({ darkMode }) {
         };
 
         window.addEventListener('mousemove', moveMouse);
+        window.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mouseup', handleMouseUp);
         window.addEventListener('mouseover', handleHover);
 
         return () => {
             window.removeEventListener('mousemove', moveMouse);
+            window.removeEventListener('mousedown', handleMouseDown);
+            window.removeEventListener('mouseup', handleMouseUp);
             window.removeEventListener('mouseover', handleHover);
         };
     }, [cursorX, cursorY]);
@@ -65,54 +58,47 @@ export default function CustomCursor({ darkMode }) {
         >
             <motion.div
                 animate={{
-                    scale: isHovered ? 2.5 : 1,
+                    scale: isClicked ? 1.5 : (isHovered ? 1.8 : 1),
                 }}
                 transition={{
                     type: "spring",
-                    stiffness: 300,
-                    damping: 20
+                    stiffness: 500,
+                    damping: 25
                 }}
-                className="relative flex items-center justify-center"
+                className="relative flex items-center justify-center p-2"
             >
-                {/* Main Cursor Core */}
-                <div
-                    style={{
-                        width: '8px',
-                        height: '8px',
-                        borderRadius: '50%',
-                        background: darkMode ? '#00d4ff' : '#00a3ff',
-                        boxShadow: `0 0 15px ${darkMode ? 'rgba(0, 212, 255, 0.8)' : 'rgba(0, 163, 255, 0.6)'}`,
-                    }}
-                />
-
-                {/* Professional Outer Halo */}
-                <motion.div
-                    initial={false}
+                {/* Logo Cursor */}
+                <motion.img
+                    src={cursorLogo}
+                    alt="Cursor Logo"
+                    className="w-10 h-10 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
                     animate={{
-                        width: isHovered ? 40 : 24,
-                        height: isHovered ? 40 : 24,
-                        opacity: isHovered ? 0.6 : 0.2,
-                        borderColor: isHovered ? 'var(--color-primary)' : 'rgba(255,255,255,0.2)'
-                    }}
-                    style={{
-                        position: 'absolute',
-                        borderRadius: '50%',
-                        border: '1.5px solid',
-                        transition: 'all 0.3s ease'
+                        filter: isHovered || isClicked ? 'brightness(1.5) drop-shadow(0 0 12px rgba(255,215,0,0.6))' : 'brightness(1) drop-shadow(0 0 8px rgba(255,255,255,0.4))'
                     }}
                 />
 
-                {/* Trail Glow (Subtle pulse) */}
+                {/* Subtle Ripple/Pulse on Click */}
+                <AnimatePresence>
+                    {isClicked && (
+                        <motion.div
+                            initial={{ scale: 0.5, opacity: 0.8 }}
+                            animate={{ scale: 2.5, opacity: 0 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 rounded-full border-2 border-white/40"
+                        />
+                    )}
+                </AnimatePresence>
+
+                {/* Magnetic Glow */}
                 <motion.div
                     className="absolute inset-0 rounded-full"
                     animate={{
-                        opacity: isHovered ? [0.1, 0.3, 0.1] : 0,
+                        opacity: isHovered || isClicked ? 0.3 : 0.1,
+                        scale: isClicked ? 6 : 4
                     }}
-                    transition={{ repeat: Infinity, duration: 2 }}
                     style={{
-                        background: 'radial-gradient(circle, rgba(0,212,255,0.3) 0%, transparent 70%)',
-                        filter: 'blur(10px)',
-                        transform: 'scale(4)',
+                        background: 'radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%)',
+                        filter: 'blur(15px)',
                         zIndex: -1
                     }}
                 />
