@@ -64,20 +64,23 @@ export default function App() {
 
   return (
     <>
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {appState === 'selecting' && (
           <SelectionGate
+            key="selection-gate"
             onPlayGame={() => handleSelection('game')}
             onGoToProfile={() => handleSelection('profile')}
           />
         )}
         {appState === 'game' && (
-          <MiniGame onComplete={handleGameComplete} />
+          <MiniGame key="mini-game" onComplete={handleGameComplete} />
         )}
-        {appState === 'loading' && <BatmanJobLoader onComplete={handleLoadingComplete} />}
+        {appState === 'loading' && (
+          <BatmanJobLoader key="batman-loader" onComplete={handleLoadingComplete} />
+        )}
       </AnimatePresence>
 
-      {(appState === 'profile' || (appState === 'loading' && !loading)) && (
+      {appState === 'profile' && (
         <>
           <InteractiveGalaxy darkMode={darkMode} />
           <CursorGlow />
