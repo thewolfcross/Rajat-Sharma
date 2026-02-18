@@ -69,7 +69,7 @@ export default function App() {
 
       {appState === 'profile' && (
         <div className="relative">
-          <InteractiveImageBackground />
+          <InteractiveImageBackground darkMode={darkMode} />
           <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
           <main style={{ position: 'relative', zIndex: 2 }}>

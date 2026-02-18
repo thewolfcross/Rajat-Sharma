@@ -71,9 +71,11 @@ export default function CustomCursor({ darkMode }) {
                 <motion.img
                     src={cursorLogo}
                     alt="Cursor Logo"
-                    className="w-10 h-10 object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+                    className={`w-10 h-10 object-contain ${darkMode ? 'drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]' : 'drop-shadow-[0_0_8px_rgba(0,0,0,0.4)]'}`}
                     animate={{
-                        filter: isHovered || isClicked ? 'brightness(1.5) drop-shadow(0 0 12px rgba(255,215,0,0.6))' : 'brightness(1) drop-shadow(0 0 8px rgba(255,255,255,0.4))'
+                        filter: isHovered || isClicked
+                            ? (darkMode ? 'brightness(1.5) drop-shadow(0 0 12px rgba(255,215,0,0.6))' : 'brightness(0.8) drop-shadow(0 0 12px rgba(0,163,255,0.6))')
+                            : (darkMode ? 'brightness(1)' : 'brightness(0.9)')
                     }}
                 />
 
@@ -84,7 +86,7 @@ export default function CustomCursor({ darkMode }) {
                             initial={{ scale: 0.5, opacity: 0.8 }}
                             animate={{ scale: 2.5, opacity: 0 }}
                             exit={{ opacity: 0 }}
-                            className="absolute inset-0 rounded-full border-2 border-white/40"
+                            className={`absolute inset-0 rounded-full border-2 ${darkMode ? 'border-white/40' : 'border-black/20'}`}
                         />
                     )}
                 </AnimatePresence>
@@ -97,7 +99,9 @@ export default function CustomCursor({ darkMode }) {
                         scale: isClicked ? 6 : 4
                     }}
                     style={{
-                        background: 'radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%)',
+                        background: darkMode
+                            ? 'radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%)'
+                            : 'radial-gradient(circle, rgba(0,163,255,0.2) 0%, transparent 70%)',
                         filter: 'blur(15px)',
                         zIndex: -1
                     }}

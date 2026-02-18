@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import profileBg from '../assets/profile-bg.png';
 
-export default function InteractiveImageBackground() {
+export default function InteractiveImageBackground({ darkMode }) {
     const containerRef = useRef(null);
     const canvasRef = useRef(null);
     const [grid, setGrid] = useState([]);
@@ -83,7 +83,9 @@ export default function InteractiveImageBackground() {
                 ctx.lineTo(this.size, -this.size);
                 ctx.lineTo(0, this.size);
                 ctx.closePath();
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fillStyle = darkMode
+                    ? `rgba(255, 255, 255, ${this.opacity})`
+                    : `rgba(0, 0, 0, ${this.opacity * 0.5})`;
                 ctx.fill();
                 ctx.restore();
             }
@@ -119,7 +121,7 @@ export default function InteractiveImageBackground() {
             window.removeEventListener('mousemove', handleMouseMove);
             cancelAnimationFrame(animationId);
         };
-    }, []);
+    }, [darkMode]);
 
     const handleContainerClick = (e) => {
         const id = Date.now();
@@ -133,7 +135,7 @@ export default function InteractiveImageBackground() {
         <div
             ref={containerRef}
             onClick={handleContainerClick}
-            className="fixed inset-0 z-0 overflow-hidden bg-[#020205] cursor-crosshair"
+            className={`fixed inset-0 z-0 overflow-hidden transition-colors duration-700 ${darkMode ? 'bg-[#020205]' : 'bg-[#f0f2f5]'} cursor-crosshair`}
         >
             {/* 1. Base 3D Parallax Image */}
             <motion.div
@@ -147,9 +149,9 @@ export default function InteractiveImageBackground() {
                 <img
                     src={profileBg}
                     alt="Background"
-                    className="w-full h-full object-contain opacity-40 p-20 select-none pointer-events-none"
+                    className={`w-full h-full object-contain ${darkMode ? 'opacity-40' : 'opacity-10'} p-20 select-none pointer-events-none`}
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#020205]/40 to-[#020205]" />
+                <div className={`absolute inset-0 bg-gradient-to-b from-transparent ${darkMode ? 'via-[#020205]/40 to-[#020205]' : 'via-white/40 to-white'}`} />
             </motion.div>
 
             {/* 2. Glass shard particles */}
@@ -167,7 +169,7 @@ export default function InteractiveImageBackground() {
                 }}
             >
                 {grid.map((t) => (
-                    <Tile key={t.id} mouseX={mouseX} mouseY={mouseY} ripples={ripples} />
+                    <Tile key={t.id} mouseX={mouseX} mouseY={mouseY} ripples={ripples} darkMode={darkMode} />
                 ))}
             </div>
 
@@ -180,7 +182,7 @@ export default function InteractiveImageBackground() {
                         animate={{ scale: 4, opacity: 0 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 1, ease: "easeOut" }}
-                        className="absolute w-64 h-64 border-2 border-white/20 rounded-full z-30 pointer-events-none"
+                        className={`absolute w-64 h-64 border-2 ${darkMode ? 'border-white/20' : 'border-black/10'} rounded-full z-30 pointer-events-none`}
                         style={{ left: r.x - 128, top: r.y - 128 }}
                     />
                 ))}
@@ -192,14 +194,16 @@ export default function InteractiveImageBackground() {
                 style={{
                     x: useSpring(useTransform(mouseX, x => x - 250), springConfig),
                     y: useSpring(useTransform(mouseY, y => y - 250), springConfig),
-                    background: "radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%)"
+                    background: darkMode
+                        ? "radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%)"
+                        : "radial-gradient(circle, rgba(0, 163, 255, 0.1) 0%, transparent 70%)"
                 }}
             />
         </div>
     );
 }
 
-function Tile({ mouseX, mouseY, ripples }) {
+function Tile({ mouseX, mouseY, ripples, darkMode }) {
     const tileRef = useRef(null);
     const [distance, setDistance] = useState(1000);
     const [isRippling, setIsRippling] = useState(false);
@@ -259,8 +263,12 @@ function Tile({ mouseX, mouseY, ripples }) {
                 scale: active ? 1.05 + progress * 0.1 : 1,
                 rotateX: tiltX * progress,
                 rotateY: tiltY * progress,
-                backgroundColor: active ? `rgba(255, 255, 255, ${progress * 0.08})` : "rgba(255, 255, 255, 0)",
-                borderColor: active ? `rgba(255, 215, 0, ${progress * 0.2})` : "rgba(255, 255, 255, 0)",
+                backgroundColor: active
+                    ? (darkMode ? `rgba(255, 255, 255, ${progress * 0.08})` : `rgba(0, 0, 0, ${progress * 0.04})`)
+                    : "rgba(255, 255, 255, 0)",
+                borderColor: active
+                    ? (darkMode ? `rgba(255, 215, 0, ${progress * 0.2})` : `rgba(0, 163, 255, ${progress * 0.3})`)
+                    : "rgba(255, 255, 255, 0)",
                 y: isRippling ? -10 : 0
             }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
@@ -271,7 +279,7 @@ function Tile({ mouseX, mouseY, ripples }) {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: progress * 0.5 }}
-                    className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none"
+                    className={`absolute inset-0 bg-gradient-to-tr ${darkMode ? 'from-white/5' : 'from-black/5'} to-transparent pointer-events-none`}
                 />
             )}
         </motion.div>
