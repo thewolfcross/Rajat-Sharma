@@ -114,27 +114,28 @@ export default function InteractiveImageBackground({ darkMode }) {
             mouseY.set(e.clientY);
         };
 
+        const handleGlobalClick = (e) => {
+            const id = Date.now();
+            setRipples(prev => [...prev, { id, x: e.clientX, y: e.clientY }]);
+            setTimeout(() => {
+                setRipples(prev => prev.filter(r => r.id !== id));
+            }, 1000);
+        };
+
         window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('click', handleGlobalClick);
 
         return () => {
             window.removeEventListener('resize', calculateGrid);
             window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('click', handleGlobalClick);
             cancelAnimationFrame(animationId);
         };
     }, [darkMode]);
 
-    const handleContainerClick = (e) => {
-        const id = Date.now();
-        setRipples(prev => [...prev, { id, x: e.clientX, y: e.clientY }]);
-        setTimeout(() => {
-            setRipples(prev => prev.filter(r => r.id !== id));
-        }, 1000);
-    };
-
     return (
         <div
             ref={containerRef}
-            onClick={handleContainerClick}
             className={`fixed inset-0 z-0 overflow-hidden transition-colors duration-700 ${darkMode ? 'bg-[#020205]' : 'bg-[#f0f2f5]'} cursor-crosshair`}
         >
             {/* 1. Base 3D Parallax Image */}

@@ -58,51 +58,51 @@ export default function CustomCursor({ darkMode }) {
         >
             <motion.div
                 animate={{
-                    scale: isClicked ? 1.5 : (isHovered ? 1.8 : 1),
+                    scale: isClicked ? 1.4 : (isHovered ? 1.6 : 1),
                 }}
                 transition={{
                     type: "spring",
-                    stiffness: 500,
-                    damping: 25
+                    stiffness: 600,
+                    damping: 30
                 }}
-                className="relative flex items-center justify-center p-2"
+                className="relative flex items-center justify-center p-1"
             >
-                {/* Logo Cursor */}
+                {/* Logo Cursor - More Subtle */}
                 <motion.img
                     src={cursorLogo}
                     alt="Cursor Logo"
-                    className={`w-10 h-10 object-contain ${darkMode ? 'drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]' : 'drop-shadow-[0_0_8px_rgba(0,0,0,0.4)]'}`}
+                    className={`w-7 h-7 object-contain ${darkMode ? 'drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]' : 'drop-shadow-[0_0_5px_rgba(0,0,0,0.2)]'}`}
                     animate={{
                         filter: isHovered || isClicked
-                            ? (darkMode ? 'brightness(1.5) drop-shadow(0 0 12px rgba(255,215,0,0.6))' : 'brightness(0.8) drop-shadow(0 0 12px rgba(0,163,255,0.6))')
-                            : (darkMode ? 'brightness(1)' : 'brightness(0.9)')
+                            ? (darkMode ? 'brightness(1.5) drop-shadow(0 0 10px rgba(255,215,0,0.5))' : 'brightness(0.8) drop-shadow(0 0 10px rgba(0,163,255,0.5))')
+                            : (darkMode ? 'brightness(0.9)' : 'brightness(0.8)')
                     }}
                 />
 
-                {/* Subtle Ripple/Pulse on Click */}
+                {/* Subtle Ripple/Pulse on Click - More Refined */}
                 <AnimatePresence>
                     {isClicked && (
                         <motion.div
-                            initial={{ scale: 0.5, opacity: 0.8 }}
-                            animate={{ scale: 2.5, opacity: 0 }}
+                            initial={{ scale: 0.8, opacity: 0.6 }}
+                            animate={{ scale: 3, opacity: 0 }}
                             exit={{ opacity: 0 }}
-                            className={`absolute inset-0 rounded-full border-2 ${darkMode ? 'border-white/40' : 'border-black/20'}`}
+                            className={`absolute inset-0 rounded-full border border-${darkMode ? 'white/30' : 'black/10'}`}
                         />
                     )}
                 </AnimatePresence>
 
-                {/* Magnetic Glow */}
+                {/* Magnetic Glow - More Subtle */}
                 <motion.div
                     className="absolute inset-0 rounded-full"
                     animate={{
-                        opacity: isHovered || isClicked ? 0.3 : 0.1,
-                        scale: isClicked ? 6 : 4
+                        opacity: isHovered || isClicked ? 0.25 : 0.08,
+                        scale: isClicked ? 5 : 3.5
                     }}
                     style={{
                         background: darkMode
-                            ? 'radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%)'
-                            : 'radial-gradient(circle, rgba(0,163,255,0.2) 0%, transparent 70%)',
-                        filter: 'blur(15px)',
+                            ? 'radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 70%)'
+                            : 'radial-gradient(circle, rgba(0,163,255,0.15) 0%, transparent 70%)',
+                        filter: 'blur(12px)',
                         zIndex: -1
                     }}
                 />
