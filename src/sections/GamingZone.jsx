@@ -4,11 +4,19 @@ import SectionWrapper from '../components/SectionWrapper';
 import { FiGrid } from 'react-icons/fi';
 
 // --- TIC TAC TOE (Strategic Arena) ---
-const TicTacToeGame = () => {
+// --- TIC TAC TOE (Strategic Arena) ---
+const TicTacToeGame = ({ darkMode }) => {
     const [board, setBoard] = useState(Array(9).fill(null));
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
     const [winner, setWinner] = useState(null);
     const WINNING_COMBINATIONS = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+
+    const checkWinner = (b) => {
+        for (let [x, y, z] of WINNING_COMBINATIONS) {
+            if (b[x] && b[x] === b[y] && b[x] === b[z]) return setWinner(b[x]);
+        }
+        if (!b.includes(null)) setWinner('draw');
+    };
 
     useEffect(() => {
         if (winner) {
@@ -32,14 +40,7 @@ const TicTacToeGame = () => {
             }, 800);
             return () => clearTimeout(timer);
         }
-    }, [isPlayerTurn, winner]);
-
-    const checkWinner = (b) => {
-        for (let [x, y, z] of WINNING_COMBINATIONS) {
-            if (b[x] && b[x] === b[y] && b[x] === b[z]) return setWinner(b[x]);
-        }
-        if (!b.includes(null)) setWinner('draw');
-    };
+    }, [isPlayerTurn, winner, board]);
 
     const handleClick = (i) => {
         if (board[i] || !isPlayerTurn || winner) return;
@@ -55,7 +56,7 @@ const TicTacToeGame = () => {
             <h3 className="text-xl font-bold mb-4" style={{ color: darkMode ? '#00d4ff' : '#0090ad' }}>Strategic Arena (You vs AI)</h3>
             <div className="grid grid-cols-3 gap-2 p-3 bg-white/5 rounded-xl">
                 {board.map((c, i) => (
-                    <button key={i} onClick={() => handleClick(i)} className="w-20 h-20 sm:w-24 sm:h-24 bg-white/5 rounded-lg text-2xl flex items-center justify-center overflow-hidden relative">
+                    <button key={i} onClick={() => handleClick(i)} className="w-20 h-20 sm:w-24 sm:h-24 bg-white/5 rounded-lg text-2xl flex items-center justify-center overflow-hidden relative border border-transparent hover:border-white/10 transition-colors">
                         {c === 'player' && (
                             <motion.div
                                 className="w-12 h-12 flex items-center justify-center text-[#00d4ff] font-bold border-2 border-[#00d4ff] rounded-lg"
@@ -102,7 +103,7 @@ export default function GamingZone({ darkMode }) {
                 {/* Game Container */}
                 <div className="w-full max-w-2xl min-h-[400px] glass-card p-6 md:p-12 flex flex-col items-center justify-center relative overflow-hidden">
                     <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[${darkMode ? '#00d4ff' : 'var(--color-primary)'}] to-transparent opacity-50`}></div>
-                    <TicTacToeGame />
+                    <TicTacToeGame darkMode={darkMode} />
                 </div>
             </div>
         </SectionWrapper>

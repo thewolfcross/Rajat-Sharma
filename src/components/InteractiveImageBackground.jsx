@@ -262,23 +262,27 @@ export default function InteractiveImageBackground({ darkMode }) {
 
 function Tile({ mouseX, mouseY, velocityX, velocityY, ripples, darkMode }) {
     const tileRef = useRef(null);
-    const [distance, setDistance] = useState(1000);
     const [shatter, setShatter] = useState({ x: 0, y: 0, rotate: 0 });
 
+    // Use motion values for scale and tilt to avoid re-renders
+    const distance = useMotionValue(1000);
+    const scale = useSpring(useTransform(distance, [0, 250], [1.15, 1]), { stiffness: 300, damping: 20 });
+
     useEffect(() => {
+        if (!tileRef.current) return;
+        const rect = tileRef.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
         const updateDistance = () => {
-            if (!tileRef.current) return;
-            const rect = tileRef.current.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            const dist = Math.sqrt((mouseX.get() - centerX) ** 2 + (mouseY.get() - centerY) ** 2);
-            setDistance(dist);
+            const d = Math.sqrt((mouseX.get() - centerX) ** 2 + (mouseY.get() - centerY) ** 2);
+            distance.set(d);
         };
 
         const unsubX = mouseX.on("change", updateDistance);
         const unsubY = mouseY.on("change", updateDistance);
         return () => { unsubX(); unsubY(); };
-    }, [mouseX, mouseY]);
+    }, [mouseX, mouseY, distance]);
 
     useEffect(() => {
         if (ripples.length === 0 || !tileRef.current) return;
@@ -300,46 +304,27 @@ function Tile({ mouseX, mouseY, velocityX, velocityY, ripples, darkMode }) {
         });
     }, [ripples]);
 
-    const range = 250;
-    const active = distance < range;
-    const progress = active ? (range - distance) / range : 0;
-
-    const vMag = Math.sqrt(velocityX.get() ** 2 + velocityY.get() ** 2);
-    const shimmer = Math.min(vMag * 0.005, 0.3) * progress;
-
-    const tiltX = active ? (mouseY.get() - (tileRef.current?.getBoundingClientRect().top || 0) - 40) * -0.15 : 0;
-    const tiltY = active ? (mouseX.get() - (tileRef.current?.getBoundingClientRect().left || 0) - 40) * 0.15 : 0;
-
     return (
         <motion.div
             ref={tileRef}
-            animate={{
-                scale: active ? 1.05 + progress * 0.1 : 1,
-                rotateX: (tiltX * progress) + shatter.rotate,
-                rotateY: (tiltY * progress) + shatter.rotate,
+            style={{
+                scale,
                 x: shatter.x,
                 y: shatter.y,
-                backgroundColor: active
-                    ? (darkMode ? `rgba(255, 255, 255, ${progress * 0.1 + shimmer})` : `rgba(0, 0, 0, ${progress * 0.05 + shimmer})`)
-                    : "rgba(255, 255, 255, 0)",
-                borderColor: active
-                    ? (darkMode ? `rgba(255, 215, 0, ${progress * 0.3})` : `rgba(0, 163, 255, ${progress * 0.4})`)
-                    : "rgba(255, 255, 255, 0)",
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className={`w-full h-full border border-transparent relative`}
-            style={{
+                rotateX: shatter.rotate,
+                rotateY: shatter.rotate,
+                backgroundColor: darkMode ? "rgba(255, 255, 255, 0)" : "rgba(0,0,0,0)",
+                border: "1px solid transparent",
                 transformStyle: "preserve-3d",
-                backdropFilter: active ? 'blur(2px)' : 'blur(1px)'
+                backdropFilter: 'blur(1px)'
             }}
-        >
-            {active && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: progress * 0.6 }}
-                    className={`absolute inset-0 bg-gradient-to-tr ${darkMode ? 'from-white/10' : 'from-black/5'} to-transparent pointer-events-none`}
-                />
-            )}
-        </motion.div>
+            whileHover={{
+                backgroundColor: darkMode ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.03)",
+                borderColor: darkMode ? "rgba(255, 215, 0, 0.2)" : "rgba(0, 163, 255, 0.2)",
+                backdropFilter: 'blur(4px)',
+                transition: { duration: 0.2 }
+            }}
+            className={`w-full h-full border relative`}
+        />
     );
 }
