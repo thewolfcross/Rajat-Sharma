@@ -11,6 +11,8 @@ export default function InteractiveImageBackground({ darkMode }) {
     // Mouse values for 3D Parallax and Interactivity
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
+    const velocityX = useMotionValue(0);
+    const velocityY = useMotionValue(0);
 
     const springConfig = { damping: 30, stiffness: 200 };
     const rotateX = useSpring(useTransform(mouseY, [0, window.innerHeight], [8, -8]), springConfig);
@@ -97,21 +99,67 @@ export default function InteractiveImageBackground({ darkMode }) {
             particles = Array.from({ length: 50 }, () => new Shard());
         };
 
+        const drawConnections = () => {
+            const maxDist = 150;
+            const mX = mouseX.get();
+            const mY = mouseY.get();
+
+            particles.forEach((p, i) => {
+                // Connect to Mouse
+                const dMouse = Math.sqrt((p.x - mX) ** 2 + (p.y - mY) ** 2);
+                if (dMouse < 200) {
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(mX, mY);
+                    const alpha = (1 - dMouse / 200) * 0.2;
+                    ctx.strokeStyle = darkMode ? `rgba(255, 215, 0, ${alpha})` : `rgba(0, 163, 255, ${alpha})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+
+                // Connect to other Shards
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < maxDist) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        const alpha = (1 - dist / maxDist) * 0.1;
+                        ctx.strokeStyle = darkMode ? `rgba(255, 255, 255, ${alpha})` : `rgba(0, 0, 0, ${alpha})`;
+                        ctx.lineWidth = 0.3;
+                        ctx.stroke();
+                    }
+                }
+            });
+        };
+
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => {
                 p.update();
                 p.draw();
             });
+            drawConnections();
             animationId = requestAnimationFrame(animate);
         };
 
         initParticles();
         animate();
 
+        let lastMousePos = { x: 0, y: 0 };
         const handleMouseMove = (e) => {
+            const vX = e.clientX - lastMousePos.x;
+            const vY = e.clientY - lastMousePos.y;
+            velocityX.set(vX);
+            velocityY.set(vY);
+
             mouseX.set(e.clientX);
             mouseY.set(e.clientY);
+            lastMousePos = { x: e.clientX, y: e.clientY };
         };
 
         const handleGlobalClick = (e) => {
@@ -170,7 +218,15 @@ export default function InteractiveImageBackground({ darkMode }) {
                 }}
             >
                 {grid.map((t) => (
-                    <Tile key={t.id} mouseX={mouseX} mouseY={mouseY} ripples={ripples} darkMode={darkMode} />
+                    <Tile
+                        key={t.id}
+                        mouseX={mouseX}
+                        mouseY={mouseY}
+                        velocityX={velocityX}
+                        velocityY={velocityY}
+                        ripples={ripples}
+                        darkMode={darkMode}
+                    />
                 ))}
             </div>
 
