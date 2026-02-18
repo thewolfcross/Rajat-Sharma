@@ -260,10 +260,10 @@ export default function InteractiveImageBackground({ darkMode }) {
     );
 }
 
-function Tile({ mouseX, mouseY, ripples, darkMode }) {
+function Tile({ mouseX, mouseY, velocityX, velocityY, ripples, darkMode }) {
     const tileRef = useRef(null);
     const [distance, setDistance] = useState(1000);
-    const [isRippling, setIsRippling] = useState(false);
+    const [shatter, setShatter] = useState({ x: 0, y: 0, rotate: 0 });
 
     useEffect(() => {
         const updateDistance = () => {
@@ -271,72 +271,73 @@ function Tile({ mouseX, mouseY, ripples, darkMode }) {
             const rect = tileRef.current.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
-
-            const dx = mouseX.get() - centerX;
-            const dy = mouseY.get() - centerY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
+            const dist = Math.sqrt((mouseX.get() - centerX) ** 2 + (mouseY.get() - centerY) ** 2);
             setDistance(dist);
         };
 
-        const unsubscribeX = mouseX.on("change", updateDistance);
-        const unsubscribeY = mouseY.on("change", updateDistance);
-
-        return () => {
-            unsubscribeX();
-            unsubscribeY();
-        };
+        const unsubX = mouseX.on("change", updateDistance);
+        const unsubY = mouseY.on("change", updateDistance);
+        return () => { unsubX(); unsubY(); };
     }, [mouseX, mouseY]);
 
-    // Check for nearby ripples
     useEffect(() => {
-        if (!tileRef.current || ripples.length === 0) return;
+        if (ripples.length === 0 || !tileRef.current) return;
         const rect = tileRef.current.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
 
         ripples.forEach(r => {
-            const dx = r.x - centerX;
-            const dy = r.y - centerY;
-            const d = Math.sqrt(dx * dx + dy * dy);
-            if (d < 150) {
-                setIsRippling(true);
-                setTimeout(() => setIsRippling(false), 500);
+            const d = Math.sqrt((r.x - centerX) ** 2 + (r.y - centerY) ** 2);
+            if (d < 200) {
+                const force = (200 - d) / 20;
+                setShatter({
+                    x: (Math.random() - 0.5) * force * 15,
+                    y: (Math.random() - 0.5) * force * 15,
+                    rotate: (Math.random() - 0.5) * force * 45
+                });
+                setTimeout(() => setShatter({ x: 0, y: 0, rotate: 0 }), 800);
             }
         });
     }, [ripples]);
 
-    const range = 200;
+    const range = 250;
     const active = distance < range;
     const progress = active ? (range - distance) / range : 0;
 
-    // Individual tile tilting towards mouse
-    const tiltX = active ? (mouseY.get() - (tileRef.current?.getBoundingClientRect().top || 0)) * -0.1 : 0;
-    const tiltY = active ? (mouseX.get() - (tileRef.current?.getBoundingClientRect().left || 0)) * 0.1 : 0;
+    const vMag = Math.sqrt(velocityX.get() ** 2 + velocityY.get() ** 2);
+    const shimmer = Math.min(vMag * 0.005, 0.3) * progress;
+
+    const tiltX = active ? (mouseY.get() - (tileRef.current?.getBoundingClientRect().top || 0) - 40) * -0.15 : 0;
+    const tiltY = active ? (mouseX.get() - (tileRef.current?.getBoundingClientRect().left || 0) - 40) * 0.15 : 0;
 
     return (
         <motion.div
             ref={tileRef}
             animate={{
                 scale: active ? 1.05 + progress * 0.1 : 1,
-                rotateX: tiltX * progress,
-                rotateY: tiltY * progress,
+                rotateX: (tiltX * progress) + shatter.rotate,
+                rotateY: (tiltY * progress) + shatter.rotate,
+                x: shatter.x,
+                y: shatter.y,
                 backgroundColor: active
-                    ? (darkMode ? `rgba(255, 255, 255, ${progress * 0.08})` : `rgba(0, 0, 0, ${progress * 0.04})`)
+                    ? (darkMode ? `rgba(255, 255, 255, ${progress * 0.1 + shimmer})` : `rgba(0, 0, 0, ${progress * 0.05 + shimmer})`)
                     : "rgba(255, 255, 255, 0)",
                 borderColor: active
-                    ? (darkMode ? `rgba(255, 215, 0, ${progress * 0.2})` : `rgba(0, 163, 255, ${progress * 0.3})`)
+                    ? (darkMode ? `rgba(255, 215, 0, ${progress * 0.3})` : `rgba(0, 163, 255, ${progress * 0.4})`)
                     : "rgba(255, 255, 255, 0)",
-                y: isRippling ? -10 : 0
             }}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="w-full h-full border border-transparent backdrop-blur-[1px] relative"
-            style={{ transformStyle: "preserve-3d" }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className={`w-full h-full border border-transparent relative`}
+            style={{
+                transformStyle: "preserve-3d",
+                backdropFilter: active ? 'blur(2px)' : 'blur(1px)'
+            }}
         >
             {active && (
                 <motion.div
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: progress * 0.5 }}
-                    className={`absolute inset-0 bg-gradient-to-tr ${darkMode ? 'from-white/5' : 'from-black/5'} to-transparent pointer-events-none`}
+                    animate={{ opacity: progress * 0.6 }}
+                    className={`absolute inset-0 bg-gradient-to-tr ${darkMode ? 'from-white/10' : 'from-black/5'} to-transparent pointer-events-none`}
                 />
             )}
         </motion.div>
