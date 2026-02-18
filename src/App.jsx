@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import InteractiveGalaxy from './components/InteractiveGalaxy';
+import HogwartsBackground from './components/HogwartsBackground';
 import ThanosTrigger from './components/ThanosTrigger';
 import Navbar from './components/Navbar';
 import Hero from './sections/Hero';
@@ -69,7 +69,7 @@ export default function App() {
 
       {appState === 'profile' && (
         <div className="relative">
-          <InteractiveGalaxy darkMode={darkMode} />
+          <HogwartsBackground darkMode={darkMode} />
           <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
           <main style={{ position: 'relative', zIndex: 2 }}>
