@@ -9,8 +9,8 @@ export default function InteractiveGalaxy({ darkMode }) {
         let animationId;
         let particles = [];
         let flowField = [];
-        let mouse = { x: -1000, y: -1000, radius: 250, strength: 0 };
-        const cellSize = 50;
+        let mouse = { x: -1000, y: -1000, radius: 300, strength: 0 };
+        const cellSize = 60;
         let rows, cols;
 
         const resize = () => {
@@ -26,7 +26,7 @@ export default function InteractiveGalaxy({ darkMode }) {
             flowField = [];
             for (let y = 0; y < rows; y++) {
                 for (let x = 0; x < cols; x++) {
-                    const angle = (Math.cos(x * 0.1) + Math.sin(y * 0.1)) * Math.PI * 2;
+                    const angle = (Math.cos(x * 0.05) + Math.sin(y * 0.05)) * Math.PI * 2;
                     flowField.push(angle);
                 }
             }
@@ -44,13 +44,23 @@ export default function InteractiveGalaxy({ darkMode }) {
                 this.vy = 0;
                 this.accX = 0;
                 this.accY = 0;
-                this.speed = Math.random() * 0.5 + 0.2;
+                this.speed = Math.random() * 0.2 + 0.1; // Slower, more elegant speed
                 this.history = [];
-                this.maxLength = Math.floor(Math.random() * 10 + 5);
+                this.maxLength = Math.floor(Math.random() * 20 + 10); // Longer, smoother tails
                 this.angle = 0;
-                this.color = darkMode
-                    ? `hsla(${200 + Math.random() * 40}, 100%, 60%, ${Math.random() * 0.4 + 0.1})`
-                    : `hsla(${20 + Math.random() * 40}, 80%, 50%, ${Math.random() * 0.3 + 0.1})`;
+
+                // Formal Portfolio Color Palette
+                if (darkMode) {
+                    // Deep Slate, Indigo, Muted Cyan
+                    const hues = [210, 220, 230];
+                    const h = hues[Math.floor(Math.random() * hues.length)];
+                    this.color = `hsla(${h}, 30%, 70%, ${Math.random() * 0.2 + 0.05})`;
+                } else {
+                    // Soft Alabaster, Pearl, Mist Blue
+                    const hues = [200, 210, 190];
+                    const h = hues[Math.floor(Math.random() * hues.length)];
+                    this.color = `hsla(${h}, 20%, 40%, ${Math.random() * 0.1 + 0.05})`;
+                }
             }
 
             update() {
@@ -62,7 +72,6 @@ export default function InteractiveGalaxy({ darkMode }) {
                     this.angle = flowField[idx];
                 }
 
-                // Mouse interaction
                 const dx = mouse.x - this.x;
                 const dy = mouse.y - this.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
@@ -72,25 +81,24 @@ export default function InteractiveGalaxy({ darkMode }) {
                     const angle = Math.atan2(dy, dx);
 
                     if (mouse.strength > 0) {
-                        // Gravity pull on click
-                        this.accX += Math.cos(angle) * force * 5;
-                        this.accY += Math.sin(angle) * force * 5;
+                        // Very smooth gravity pull
+                        this.accX += Math.cos(angle) * force * 1.5;
+                        this.accY += Math.sin(angle) * force * 1.5;
                     } else {
-                        // Gentle flow follow
-                        this.accX += Math.cos(this.angle + force * 2) * this.speed;
-                        this.accY += Math.sin(this.angle + force * 2) * this.speed;
+                        // Subtle interaction
+                        this.accX += Math.cos(this.angle + force) * this.speed * 0.5;
+                        this.accY += Math.sin(this.angle + force) * this.speed * 0.5;
                     }
                 } else {
-                    this.accX += Math.cos(this.angle) * this.speed * 0.5;
-                    this.accY += Math.sin(this.angle) * this.speed * 0.5;
+                    this.accX += Math.cos(this.angle) * this.speed * 0.3;
+                    this.accY += Math.sin(this.angle) * this.speed * 0.3;
                 }
 
                 this.vx += this.accX;
                 this.vy += this.accY;
 
-                // Friction
-                this.vx *= 0.96;
-                this.vy *= 0.96;
+                this.vx *= 0.98; // Higher friction for calmer movement
+                this.vy *= 0.98;
 
                 this.x += this.vx;
                 this.y += this.vy;
@@ -98,78 +106,74 @@ export default function InteractiveGalaxy({ darkMode }) {
                 this.accX = 0;
                 this.accY = 0;
 
-                // Boundary check
-                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                if (this.x < -100 || this.x > canvas.width + 100 || this.y < -100 || this.y > canvas.height + 100) {
                     this.reset();
                 }
 
-                // Tail history
                 this.history.push({ x: this.x, y: this.y });
                 if (this.history.length > this.maxLength) this.history.shift();
             }
 
             draw() {
+                if (this.history.length < 2) return;
                 ctx.beginPath();
                 ctx.strokeStyle = this.color;
-                ctx.lineWidth = 1.5;
-                if (this.history.length > 0) {
-                    ctx.moveTo(this.history[0].x, this.history[0].y);
-                    for (let i = 1; i < this.history.length; i++) {
-                        ctx.lineTo(this.history[i].x, this.history[i].y);
-                    }
-                    ctx.stroke();
+                ctx.lineWidth = 1;
+                ctx.moveTo(this.history[0].x, this.history[0].y);
+                for (let i = 1; i < this.history.length; i++) {
+                    ctx.lineTo(this.history[i].x, this.history[i].y);
                 }
+                ctx.stroke();
             }
         }
 
         const initParticles = () => {
             particles = [];
-            const count = Math.min(window.innerWidth / 4, 300);
+            const count = Math.min(window.innerWidth / 10, 150); // Fewer particles for a cleaner look
             for (let i = 0; i < count; i++) {
                 particles.push(new Particle());
             }
         };
 
         const drawBackground = () => {
-            const time = Date.now() * 0.0005;
-            const grad = ctx.createRadialGradient(
-                canvas.width / 2 + Math.cos(time) * 100,
-                canvas.height / 2 + Math.sin(time) * 100,
-                0,
-                canvas.width / 2,
-                canvas.height / 2,
-                canvas.width
-            );
+            const time = Date.now() * 0.0002; // Very slow time progression
 
-            if (darkMode) {
-                grad.addColorStop(0, '#0a0a15');
-                grad.addColorStop(0.5, '#050505');
-                grad.addColorStop(1, '#020205');
-            } else {
-                grad.addColorStop(0, '#f8faff');
-                grad.addColorStop(0.5, '#ffffff');
-                grad.addColorStop(1, '#f0f4f8');
-            }
-
-            ctx.fillStyle = grad;
+            // Professional Base
+            ctx.fillStyle = darkMode ? '#020205' : '#fcfcff';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Subtle Mesh Blobs
-            ctx.filter = 'blur(100px)';
-            ctx.globalAlpha = darkMode ? 0.08 : 0.04;
+            // Aurora Mesh Blobs
+            ctx.filter = 'blur(120px)';
 
-            const bX = canvas.width / 2 + Math.sin(time * 0.7) * 200;
-            const bY = canvas.height / 2 + Math.cos(time * 0.8) * 200;
+            if (darkMode) {
+                // Top Left: Deep Indigo
+                ctx.globalAlpha = 0.15;
+                ctx.fillStyle = '#1e1b4b';
+                ctx.beginPath();
+                ctx.arc(Math.sin(time) * 200 + 200, Math.cos(time * 0.8) * 200 + 200, 500, 0, Math.PI * 2);
+                ctx.fill();
 
-            ctx.fillStyle = darkMode ? '#00d4ff' : '#3b82f6';
-            ctx.beginPath();
-            ctx.arc(bX, bY, 300, 0, Math.PI * 2);
-            ctx.fill();
+                // Bottom Right: Slate Blue
+                ctx.globalAlpha = 0.1;
+                ctx.fillStyle = '#0f172a';
+                ctx.beginPath();
+                ctx.arc(canvas.width - 200, canvas.height - 200, 600, 0, Math.PI * 2);
+                ctx.fill();
+            } else {
+                // Top Right: Soft Mist Blue
+                ctx.globalAlpha = 0.05;
+                ctx.fillStyle = '#cbd5e1';
+                ctx.beginPath();
+                ctx.arc(canvas.width - 200, 200, 500, 0, Math.PI * 2);
+                ctx.fill();
 
-            ctx.fillStyle = darkMode ? '#ffd700' : '#fb923c';
-            ctx.beginPath();
-            ctx.arc(canvas.width - bX, canvas.height - bY, 250, 0, Math.PI * 2);
-            ctx.fill();
+                // Bottom Left: Very Soft Pearl
+                ctx.globalAlpha = 0.04;
+                ctx.fillStyle = '#e2e8f0';
+                ctx.beginPath();
+                ctx.arc(200, canvas.height - 200, 400, 0, Math.PI * 2);
+                ctx.fill();
+            }
 
             ctx.filter = 'none';
             ctx.globalAlpha = 1;
@@ -193,12 +197,12 @@ export default function InteractiveGalaxy({ darkMode }) {
 
         const onMouseDown = () => {
             mouse.strength = 1;
-            mouse.radius = 400;
+            mouse.radius = 450;
         };
 
         const onMouseUp = () => {
             mouse.strength = 0;
-            mouse.radius = 250;
+            mouse.radius = 300;
         };
 
         window.addEventListener('resize', resize);
@@ -225,8 +229,8 @@ export default function InteractiveGalaxy({ darkMode }) {
                 position: 'fixed',
                 inset: 0,
                 zIndex: -1,
-                background: darkMode ? '#050505' : '#ffffff',
-                pointerEvents: 'auto', // Enable pointer events for interaction
+                background: darkMode ? '#020205' : '#fcfcff',
+                pointerEvents: 'auto',
             }}
         />
     );
