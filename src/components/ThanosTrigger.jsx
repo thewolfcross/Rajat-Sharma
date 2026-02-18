@@ -76,12 +76,12 @@ export default function ThanosTrigger({ isActive, toggle }) {
 
                 <motion.button
                     onClick={handleClick}
-                    className="relative group w-20 h-20 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 flex items-center justify-center overflow-hidden shadow-2xl"
+                    className="relative group w-24 h-24 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 flex items-center justify-center overflow-hidden shadow-2xl"
                     whileHover={{ scale: 1.1, borderColor: '#ffd700' }}
                     whileTap={{ scale: 0.9 }}
                     animate={{
                         borderColor: isActive ? '#ffd700' : 'rgba(255,255,255,0.1)',
-                        boxShadow: isActive ? '0 0 30px rgba(255, 215, 0, 0.4)' : 'none'
+                        boxShadow: isActive ? '0 0 35px rgba(255, 215, 0, 0.4)' : 'none'
                     }}
                 >
                     <motion.img
@@ -94,7 +94,7 @@ export default function ThanosTrigger({ isActive, toggle }) {
                             scale: isActive ? 1.1 : 1,
                             rotate: 0
                         }}
-                        className="w-14 h-14 object-contain brightness-125"
+                        className="w-18 h-18 object-contain brightness-125"
                     />
 
                     {/* Glow effect */}
@@ -103,10 +103,10 @@ export default function ThanosTrigger({ isActive, toggle }) {
 
                 <motion.span
                     initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 0.6, y: 0 }}
-                    className="mt-2 text-[10px] uppercase font-bold tracking-[0.2em] text-white/50 pointer-events-none"
+                    animate={{ opacity: 0.8, y: 0 }}
+                    className="mt-3 text-[11px] uppercase font-bold tracking-[0.25em] text-white pointer-events-none drop-shadow-lg"
                 >
-                    {isActive ? "Balanced" : "The Snap"}
+                    Thanos Snap
                 </motion.span>
             </div>
         </>
