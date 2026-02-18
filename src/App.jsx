@@ -53,7 +53,8 @@ export default function App() {
   };
 
   return (
-    <>
+    <div className={`min-h-screen transition-colors duration-500 ${darkMode ? 'dark' : ''}`}>
+      <CustomCursor darkMode={darkMode} />
       <AnimatePresence mode="wait">
         {appState === 'selecting' && (
           <SelectionGate
@@ -90,6 +91,6 @@ export default function App() {
           <ThanosTrigger isActive={thanosMode} toggle={toggleThanos} />
         </>
       )}
-    </>
+    </div>
   );
 }

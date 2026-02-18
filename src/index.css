@@ -42,6 +42,14 @@
   cursor: none !important;
 }
 
+a,
+button,
+input,
+textarea,
+[role="button"] {
+  cursor: none !important;
+}
+
 html {
   scroll-behavior: smooth;
   font-family: var(--font-body);
