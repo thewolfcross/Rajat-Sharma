@@ -14,80 +14,91 @@ import CaseStudies from './sections/CaseStudies';
 import GamingZone from './sections/GamingZone';
 import Testimonials from './sections/Testimonials';
 import Contact from './sections/Contact';
-import PacmanLoader from './components/PacmanLoader';
+import BatmanJobLoader from './components/BatmanJobLoader';
+import SelectionGate from './components/SelectionGate';
+import MiniGame from './components/MiniGame';
 
 export default function App() {
+  const [appState, setAppState] = useState('selecting'); // 'selecting', 'game', 'loading', 'profile'
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
   const [thanosMode, setThanosMode] = useState(false);
-  const [jethaMode, setJethaMode] = useState(false); // Added jethaMode state
+  const [jethaMode, setJethaMode] = useState(false);
 
   useEffect(() => {
     document.body.classList.toggle('light-mode', !darkMode);
   }, [darkMode]);
 
-  // Added toggleThanos function for mutual exclusivity
   const toggleThanos = () => {
     setThanosMode(!thanosMode);
-    if (jethaMode) setJethaMode(false); // Mutual exclusive
+    if (jethaMode) setJethaMode(false);
   };
 
-  // Added toggleJetha function for mutual exclusivity
   const toggleJetha = () => {
     setJethaMode(!jethaMode);
-    if (thanosMode) setThanosMode(false); // Mutual exclusive
+    if (thanosMode) setThanosMode(false);
   };
 
-  // Added getModeClass function to determine active mode class
   const getModeClass = () => {
     if (thanosMode) return 'thanos-active';
     if (jethaMode) return 'jetha-active';
     return '';
   };
 
+  const handleSelection = (choice) => {
+    if (choice === 'game') {
+      setAppState('game');
+    } else {
+      setAppState('loading');
+    }
+  };
+
+  const handleGameComplete = () => {
+    setAppState('loading');
+  };
+
+  const handleLoadingComplete = () => {
+    setLoading(false);
+    setAppState('profile');
+  };
+
   return (
     <>
       <AnimatePresence>
-        {loading && <PacmanLoader onComplete={() => setLoading(false)} />}
+        {appState === 'selecting' && (
+          <SelectionGate
+            onPlayGame={() => handleSelection('game')}
+            onGoToProfile={() => handleSelection('profile')}
+          />
+        )}
+        {appState === 'game' && (
+          <MiniGame onComplete={handleGameComplete} />
+        )}
+        {appState === 'loading' && <BatmanJobLoader onComplete={handleLoadingComplete} />}
       </AnimatePresence>
-      <InteractiveGalaxy darkMode={darkMode} />
-      <CursorGlow />
-      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
-      {/* Updated main className to use getModeClass() and new section rendering logic */}
-      <main className={`transition-all duration-1000 ${getModeClass()}`} style={{ position: 'relative', zIndex: 2 }}>
-        {/* Hero: Visible in both */}
-        <div className="mode-transition thanos-visible jetha-visible"><Hero /></div>
+      {(appState === 'profile' || (appState === 'loading' && !loading)) && (
+        <>
+          <InteractiveGalaxy darkMode={darkMode} />
+          <CursorGlow />
+          <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
-        {/* About: Hidden in both */}
-        <div className="mode-transition thanos-hidden jetha-hidden"><About /></div>
+          <main className={`transition-all duration-1000 ${getModeClass()}`} style={{ position: 'relative', zIndex: 2 }}>
+            <div className="mode-transition thanos-visible jetha-visible"><Hero /></div>
+            <div className="mode-transition thanos-hidden jetha-hidden"><About /></div>
+            <div className="mode-transition thanos-visible jetha-visible"><ImpactDashboard /></div>
+            <div className="mode-transition thanos-visible jetha-hidden"><Experience /></div>
+            <div className="mode-transition thanos-hidden jetha-hidden"><Skills /></div>
+            <div className="mode-transition thanos-hidden jetha-hidden"><CaseStudies /></div>
+            <div className="mode-transition thanos-hidden jetha-visible"><GamingZone /></div>
+            <div className="mode-transition thanos-hidden jetha-hidden"><Testimonials /></div>
+            <div className="mode-transition thanos-visible jetha-hidden"><Contact /></div>
+          </main>
 
-        {/* Impact: Visible in both (Main Highlight) */}
-        <div className="mode-transition thanos-visible jetha-visible"><ImpactDashboard /></div>
-
-        {/* Experience: Visible in Thanos (Professional), Hidden in Jetha (Fun) */}
-        <div className="mode-transition thanos-visible jetha-hidden"><Experience /></div>
-
-        {/* Skills: Hidden in Thanos, Hidden in Jetha */}
-        <div className="mode-transition thanos-hidden jetha-hidden"><Skills /></div>
-
-        {/* Case Studies: Hidden in Thanos, Hidden in Jetha */}
-        <div className="mode-transition thanos-hidden jetha-hidden"><CaseStudies /></div>
-
-        {/* Games: Hidden in Thanos (Focus), Visible in Jetha (Fun) */}
-        <div className="mode-transition thanos-hidden jetha-visible"><GamingZone /></div>
-
-        {/* Testimonials: Hidden in Thanos, Hidden in Jetha */}
-        <div className="mode-transition thanos-hidden jetha-hidden"><Testimonials /></div>
-
-        {/* Contact: Visible in Thanos, Hidden in Jetha */}
-        <div className="mode-transition thanos-visible jetha-hidden"><Contact /></div>
-      </main>
-
-      {/* Updated ThanosTrigger to use toggleThanos */}
-      <ThanosTrigger isActive={thanosMode} toggle={toggleThanos} />
-      {/* Added JethaTrigger */}
-      <JethaTrigger isActive={jethaMode} toggle={toggleJetha} />
+          <ThanosTrigger isActive={thanosMode} toggle={toggleThanos} />
+          <JethaTrigger isActive={jethaMode} toggle={toggleJetha} />
+        </>
+      )}
     </>
   );
 }
