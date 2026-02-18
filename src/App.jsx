@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import InteractiveGalaxy from './components/InteractiveGalaxy';
 import ThanosTrigger from './components/ThanosTrigger';
 import Navbar from './components/Navbar';
