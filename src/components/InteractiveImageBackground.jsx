@@ -55,7 +55,7 @@ export default function InteractiveImageBackground() {
                 <img
                     src={profileBg}
                     alt="Background"
-                    className="w-full h-full object-cover opacity-60 scale-110"
+                    className="w-full h-full object-contain opacity-40 p-20"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#020205]/40 to-[#020205]" />
             </motion.div>
